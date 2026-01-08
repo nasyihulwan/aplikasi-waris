@@ -1,0 +1,65 @@
+name: aplikasi_warisan
+description: Aplikasi Pembagian Warisan
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & Icons
+  cupertino_icons: ^1.0.2
+  google_fonts: ^6.1.0
+
+  # State Management
+  provider: ^6.1.1
+
+  # Network & API
+  http: ^1.1.0
+
+  # Local Storage
+  shared_preferences: ^2.2.2
+
+  # File Handling
+  image_picker: ^1.0.4
+  file_picker: ^6.1.1
+  path_provider: ^2.1.1
+
+  # Utilities
+  intl: ^0.18.1
+
+  # PDF Generation (untuk export hasil perhitungan)
+  pdf: ^3.10.7
+  printing: ^5.11.1
+
+  # QR Code (untuk share data)
+  qr_flutter: ^4.1.0
+
+  # Animations
+  lottie: ^2.7.0
+
+  # Connectivity Check
+  connectivity_plus: ^5.0.2
+
+  # URL Launcher (untuk buka link bantuan, dll)
+  url_launcher: ^6.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^3.0.0
+
+# Konfigurasi Icon Aplikasi
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: 'assets/images/icon.png'
+  adaptive_icon_background: '#00796B'
+  adaptive_icon_foreground: 'assets/images/icon_foreground.png'
+
+flutter:
+  uses-material-design: true
