@@ -29,14 +29,43 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
     _loadSettings();
   }
 
-  /// Memuat pengaturan dari provider
+  /// Memuat pengaturan dari provider dan server
   Future<void> _loadSettings() async {
     print('⚙️ [PENGATURAN] Memuat pengaturan...');
     final penyediaAuth = Provider.of<PenyediaAuth>(context, listen: false);
+
+    // Pertama, load dari local state
     setState(() {
       _is2FAEnabled = penyediaAuth.twoFactorEnabled;
     });
-    print('⚙️ [PENGATURAN] Status 2FA: $_is2FAEnabled');
+    print('⚙️ [PENGATURAN] Status 2FA dari local: $_is2FAEnabled');
+
+    // Kemudian, fetch status terbaru dari server
+    if (penyediaAuth.idPengguna != null) {
+      try {
+        print('⚙️ [PENGATURAN] Mengambil status 2FA dari server...');
+        final result =
+            await Layanan2FA.checkStatus(int.parse(penyediaAuth.idPengguna!));
+        final serverStatus = result['two_factor_enabled'] == true;
+
+        print('⚙️ [PENGATURAN] Status 2FA dari server: $serverStatus');
+
+        // Update jika berbeda dengan local state
+        if (serverStatus != _is2FAEnabled) {
+          print('⚙️ [PENGATURAN] Status berbeda, updating...');
+          await penyediaAuth.set2FAEnabled(serverStatus);
+          if (mounted) {
+            setState(() {
+              _is2FAEnabled = serverStatus;
+            });
+          }
+        }
+      } catch (e) {
+        print('🔴 [PENGATURAN] Error fetching 2FA status: $e');
+      }
+    }
+
+    print('⚙️ [PENGATURAN] Status 2FA final: $_is2FAEnabled');
   }
 
   /// Menampilkan dialog untuk enable 2FA
