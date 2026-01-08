@@ -6,9 +6,10 @@ import 'package:http/http.dart' as http;
 /// Menangani komunikasi dengan backend PHP untuk fitur 2FA
 class Layanan2FA {
   // Base URL untuk API 2FA
-  // Development: localhost
+  // Development: 10.130.28.148
   // Production: ganti dengan URL server
-  static const String baseUrl = 'http://localhost/aplikasi_waris/auth/2fa.php';
+  static const String baseUrl =
+      'http://10.130.28.148/aplikasi_waris/auth/2fa.php';
 
   // Timeout untuk request API
   static const Duration _timeout = Duration(seconds: 30);
