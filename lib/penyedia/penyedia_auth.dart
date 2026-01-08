@@ -52,10 +52,26 @@ class PenyediaAuth with ChangeNotifier {
   bool get twoFactorVerified => _twoFactorVerified;
   bool get tanyakan2FA => _tanyakan2FA;
 
+  // Flag untuk menandakan data sudah dimuat
+  bool _sudahDimuat = false;
+  bool get sudahDimuat => _sudahDimuat;
+
   // Konstruktor untuk load data dari storage
   PenyediaAuth() {
     print('👤 [PENYEDIA_AUTH] Inisialisasi PenyediaAuth');
     _muatDataPengguna();
+  }
+
+  /// Method untuk menunggu data selesai dimuat
+  Future<void> tungguDataDimuat() async {
+    // Tunggu sampai data dimuat (max 5 detik)
+    int counter = 0;
+    while (!_sudahDimuat && counter < 50) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      counter++;
+    }
+    print(
+        '👤 [PENYEDIA_AUTH] tungguDataDimuat selesai, sudahDimuat=$_sudahDimuat');
   }
 
   Future<void> _muatDataPengguna() async {
@@ -98,6 +114,7 @@ class PenyediaAuth with ChangeNotifier {
       print('🔴 [PENYEDIA_AUTH] Error loading 2FA status: $e');
     }
 
+    _sudahDimuat = true;
     notifyListeners();
     print('🟢 [PENYEDIA_AUTH] Data pengguna berhasil dimuat');
   }
