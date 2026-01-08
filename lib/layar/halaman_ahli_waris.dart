@@ -4,7 +4,7 @@ import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
 
 class HalamanAhliWaris extends StatefulWidget {
-  const HalamanAhliWaris({Key? key}) : super(key: key);
+  const HalamanAhliWaris({super.key});
 
   @override
   _HalamanAhliWarisState createState() => _HalamanAhliWarisState();
@@ -66,22 +66,22 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
   }
 
   Widget _buatTampilanKosong() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.people_outline,
             size: 100,
             color: Colors.grey,
           ),
-          const SizedBox(height: 16),
-          const Text(
+          SizedBox(height: 16),
+          Text(
             'Belum ada ahli waris',
             style: TextStyle(fontSize: 18, color: Colors.grey),
           ),
-          const SizedBox(height: 8),
-          const Text(
+          SizedBox(height: 8),
+          Text(
             'Klik tombol + untuk menambah',
             style: TextStyle(fontSize: 14, color: Colors.grey),
           ),
@@ -240,7 +240,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     labelText: 'Hubungan',
                     border: OutlineInputBorder(),
                   ),
-                  value: hubunganTerpilih,
+                  initialValue: hubunganTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'istri', child: Text('Istri')),
                     DropdownMenuItem(value: 'suami', child: Text('Suami')),
@@ -267,7 +267,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     labelText: 'Jenis Kelamin',
                     border: OutlineInputBorder(),
                   ),
-                  value: jenisKelaminTerpilih,
+                  initialValue: jenisKelaminTerpilih,
                   items: const [
                     DropdownMenuItem(
                         value: 'laki-laki', child: Text('Laki-laki')),
@@ -375,7 +375,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     labelText: 'Hubungan',
                     border: OutlineInputBorder(),
                   ),
-                  value: hubunganTerpilih,
+                  initialValue: hubunganTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'istri', child: Text('Istri')),
                     DropdownMenuItem(value: 'suami', child: Text('Suami')),
@@ -402,7 +402,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     labelText: 'Jenis Kelamin',
                     border: OutlineInputBorder(),
                   ),
-                  value: jenisKelaminTerpilih,
+                  initialValue: jenisKelaminTerpilih,
                   items: const [
                     DropdownMenuItem(
                         value: 'laki-laki', child: Text('Laki-laki')),

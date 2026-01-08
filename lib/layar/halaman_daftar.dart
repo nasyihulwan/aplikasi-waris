@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../penyedia/penyedia_auth.dart';
 
 class HalamanDaftar extends StatefulWidget {
+  const HalamanDaftar({super.key});
+
   @override
   State<HalamanDaftar> createState() => _HalamanDaftarState();
 }
@@ -70,7 +72,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
     if (sukses) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('✅ Pendaftaran berhasil! Silakan login'),
           backgroundColor: Colors.green,
           duration: Duration(seconds: 3),
@@ -78,7 +80,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('❌ Pendaftaran gagal. Periksa kembali data Anda'),
           backgroundColor: Colors.red,
           duration: Duration(seconds: 3),
@@ -97,7 +99,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
     TextInputType? keyboardType,
   }) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
         controller: c,
         obscureText: isPassword ? _sembunyiPassword : false,
@@ -117,7 +119,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
         },
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
           counterText: '', // Hilangkan counter text
           suffixIcon: isPassword
               ? IconButton(
@@ -141,11 +143,11 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daftar Akun Baru'),
+        title: const Text('Daftar Akun Baru'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
           child: Column(
@@ -153,21 +155,21 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
             children: [
               // Header untuk Data Pendaftar
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Color(0xFF00796B).withOpacity(0.1),
+                  color: const Color(0xFF00796B).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Color(0xFF00796B)),
+                  border: Border.all(color: const Color(0xFF00796B)),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.person, color: Color(0xFF00796B), size: 28),
-                    SizedBox(width: 12),
+                    const Icon(Icons.person, color: Color(0xFF00796B), size: 28),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Data Pendaftar (Anda)',
                             style: TextStyle(
                               fontSize: 18,
@@ -175,7 +177,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                               color: Color(0xFF00796B),
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
                             'Isi data diri Anda sebagai ahli waris',
                             style: TextStyle(
@@ -189,7 +191,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               input(nama, 'Nama Lengkap Anda'),
               input(email, 'Email Anda',
@@ -202,13 +204,13 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                   keyboardType: TextInputType.multiline),
               input(nik, 'NIK Anda (16 digit)', isNumber: true, maxLength: 16),
 
-              SizedBox(height: 32),
-              Divider(thickness: 2),
-              SizedBox(height: 20),
+              const SizedBox(height: 32),
+              const Divider(thickness: 2),
+              const SizedBox(height: 20),
 
               // Header untuk Data Pewaris
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.orange.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -216,8 +218,8 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.person_outline, color: Colors.orange, size: 28),
-                    SizedBox(width: 12),
+                    const Icon(Icons.person_outline, color: Colors.orange, size: 28),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +232,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                               color: Colors.orange[900],
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
                             'Isi data orang yang meninggal dunia',
                             style: TextStyle(
@@ -244,7 +246,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               input(namaPewaris, 'Nama Lengkap Pewaris'),
               input(tempatLahirPewaris, 'Tempat Lahir Pewaris'),
@@ -253,7 +255,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
               input(nikPewaris, 'NIK Pewaris (16 digit)',
                   isNumber: true, maxLength: 16),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Tombol Daftar
               SizedBox(
@@ -262,13 +264,13 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                 child: ElevatedButton(
                   onPressed: _loading ? null : daftar,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00796B),
+                    backgroundColor: const Color(0xFF00796B),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: _loading
-                      ? SizedBox(
+                      ? const SizedBox(
                           width: 24,
                           height: 24,
                           child: CircularProgressIndicator(
@@ -276,7 +278,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                             strokeWidth: 2,
                           ),
                         )
-                      : Text(
+                      : const Text(
                           'Daftar',
                           style: TextStyle(
                             fontSize: 16,
@@ -286,19 +288,19 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                         ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Info tambahan
               Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: Colors.blue, size: 20),
-                    SizedBox(width: 8),
+                    const Icon(Icons.info_outline, color: Colors.blue, size: 20),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         'Pastikan data yang Anda isi benar. NIK harus 16 digit angka.',

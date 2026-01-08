@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../layanan/layanan_api.dart';
+import '../layanan/layanan_2fa.dart';
 
+/// Penyedia Autentikasi
+/// Mengelola state autentikasi user termasuk login, logout, dan 2FA
 class PenyediaAuth with ChangeNotifier {
   String? _idPengguna;
   String? _namaPengguna;
@@ -13,6 +17,18 @@ class PenyediaAuth with ChangeNotifier {
   bool _sudahLogin = false;
   String? _pesanError; // Untuk menyimpan pesan error
 
+  // Two-Factor Authentication
+  bool _twoFactorEnabled = false;
+  bool _twoFactorVerified = false;
+  bool _tanyakan2FA = true; // Flag untuk menanyakan 2FA
+
+  // Secure storage untuk data sensitif
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+  );
+
   String? get idPengguna => _idPengguna;
   String? get namaPengguna => _namaPengguna;
   String? get email => _email;
@@ -23,12 +39,20 @@ class PenyediaAuth with ChangeNotifier {
   bool get sudahLogin => _sudahLogin;
   String? get pesanError => _pesanError;
 
+  // Getters untuk 2FA
+  bool get twoFactorEnabled => _twoFactorEnabled;
+  bool get twoFactorVerified => _twoFactorVerified;
+  bool get tanyakan2FA => _tanyakan2FA;
+
   // Konstruktor untuk load data dari storage
   PenyediaAuth() {
+    print('👤 [PENYEDIA_AUTH] Inisialisasi PenyediaAuth');
     _muatDataPengguna();
   }
 
   Future<void> _muatDataPengguna() async {
+    print('👤 [PENYEDIA_AUTH] Memuat data pengguna dari storage...');
+
     final prefs = await SharedPreferences.getInstance();
     _idPengguna = prefs.getString('id_pengguna');
     _namaPengguna = prefs.getString('nama_pengguna');
@@ -38,7 +62,31 @@ class PenyediaAuth with ChangeNotifier {
     _tahunLahirPewaris = prefs.getString('tahun_lahir_pewaris');
     _tempatLahirPewaris = prefs.getString('tempat_lahir_pewaris');
     _sudahLogin = prefs.getBool('sudah_login') ?? false;
+    _tanyakan2FA = prefs.getBool('tanyakan_2fa') ?? true;
+
+    print('👤 [PENYEDIA_AUTH] Data SharedPreferences:');
+    print('   - id_pengguna: $_idPengguna');
+    print('   - nama_pengguna: $_namaPengguna');
+    print('   - email: $_email');
+    print('   - sudah_login: $_sudahLogin');
+    print('   - tanyakan_2fa: $_tanyakan2FA');
+
+    // Load 2FA status from secure storage
+    try {
+      final twoFactorEnabled = await _secureStorage.read(key: '2fa_enabled');
+      final twoFactorVerified = await _secureStorage.read(key: '2fa_verified');
+      _twoFactorEnabled = twoFactorEnabled == 'true';
+      _twoFactorVerified = twoFactorVerified == 'true';
+
+      print('👤 [PENYEDIA_AUTH] Data SecureStorage:');
+      print('   - 2fa_enabled: $_twoFactorEnabled');
+      print('   - 2fa_verified: $_twoFactorVerified');
+    } catch (e) {
+      print('🔴 [PENYEDIA_AUTH] Error loading 2FA status: $e');
+    }
+
     notifyListeners();
+    print('🟢 [PENYEDIA_AUTH] Data pengguna berhasil dimuat');
   }
 
   Future<bool> daftar({
@@ -176,6 +224,10 @@ class PenyediaAuth with ChangeNotifier {
         await prefs.setBool('sudah_login', true);
 
         print('💾 Data login berhasil disimpan');
+
+        // Cek status 2FA dari response atau API
+        await _cekStatus2FA();
+
         notifyListeners();
         return true;
       } else {
@@ -192,9 +244,100 @@ class PenyediaAuth with ChangeNotifier {
     }
   }
 
+  /// Cek status 2FA untuk user saat ini
+  Future<void> _cekStatus2FA() async {
+    if (_idPengguna == null) return;
+
+    try {
+      print('🔐 Mengecek status 2FA untuk user $_idPengguna');
+      final result = await Layanan2FA.checkStatus(int.parse(_idPengguna!));
+
+      if (result['two_factor_enabled'] == true) {
+        _twoFactorEnabled = true;
+        _twoFactorVerified = false; // Belum diverifikasi untuk sesi ini
+        await _secureStorage.write(key: '2fa_enabled', value: 'true');
+        print('🔐 2FA aktif untuk user ini');
+      } else {
+        _twoFactorEnabled = false;
+        _twoFactorVerified = true; // Tidak perlu verifikasi
+        await _secureStorage.write(key: '2fa_enabled', value: 'false');
+        print('🔐 2FA tidak aktif untuk user ini');
+      }
+    } catch (e) {
+      print('🔴 Error mengecek status 2FA: $e');
+      // Default ke tidak aktif jika error
+      _twoFactorEnabled = false;
+      _twoFactorVerified = true;
+    }
+  }
+
+  /// Set status 2FA verified (setelah user berhasil verifikasi OTP)
+  Future<void> set2FAVerified(bool verified) async {
+    print('👤 [PENYEDIA_AUTH] set2FAVerified dipanggil: verified=$verified');
+    _twoFactorVerified = verified;
+    await _secureStorage.write(key: '2fa_verified', value: verified.toString());
+    print('🟢 [PENYEDIA_AUTH] 2FA verified status disimpan ke SecureStorage');
+    notifyListeners();
+  }
+
+  /// Set 2FA enabled (setelah setup berhasil)
+  Future<void> set2FAEnabled(bool enabled) async {
+    print('👤 [PENYEDIA_AUTH] set2FAEnabled dipanggil: enabled=$enabled');
+    _twoFactorEnabled = enabled;
+    await _secureStorage.write(key: '2fa_enabled', value: enabled.toString());
+    print('👤 [PENYEDIA_AUTH] 2FA enabled status disimpan ke SecureStorage');
+
+    if (enabled) {
+      _twoFactorVerified = true; // Langsung verified setelah setup
+      await _secureStorage.write(key: '2fa_verified', value: 'true');
+      print('🟢 [PENYEDIA_AUTH] 2FA diaktifkan dan langsung diverifikasi');
+    } else {
+      print('⚠️ [PENYEDIA_AUTH] 2FA dinonaktifkan');
+    }
+    notifyListeners();
+  }
+
+  /// Set preferensi "Jangan tanya lagi" untuk 2FA
+  Future<void> setTanyakan2FA(bool tanyakan) async {
+    print('👤 [PENYEDIA_AUTH] setTanyakan2FA dipanggil: tanyakan=$tanyakan');
+    _tanyakan2FA = tanyakan;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('tanyakan_2fa', tanyakan);
+    print('🟢 [PENYEDIA_AUTH] Preferensi tanyakan 2FA disimpan');
+    notifyListeners();
+  }
+
+  /// Cek apakah perlu redirect ke halaman verifikasi 2FA
+  bool perluVerifikasi2FA() {
+    final perlu = _twoFactorEnabled && !_twoFactorVerified;
+    print(
+        '👤 [PENYEDIA_AUTH] perluVerifikasi2FA: $perlu (enabled=$_twoFactorEnabled, verified=$_twoFactorVerified)');
+    return perlu;
+  }
+
+  /// Cek apakah perlu menampilkan prompt setup 2FA
+  bool perluPrompt2FA() {
+    final perlu = !_twoFactorEnabled && _tanyakan2FA;
+    print(
+        '👤 [PENYEDIA_AUTH] perluPrompt2FA: $perlu (enabled=$_twoFactorEnabled, tanyakan=$_tanyakan2FA)');
+    return perlu;
+  }
+
   Future<void> logout() async {
+    print('👤 [PENYEDIA_AUTH] Logout dipanggil');
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    print('👤 [PENYEDIA_AUTH] SharedPreferences dibersihkan');
+
+    // Clear secure storage
+    try {
+      await _secureStorage.delete(key: '2fa_enabled');
+      await _secureStorage.delete(key: '2fa_verified');
+      print('👤 [PENYEDIA_AUTH] SecureStorage dibersihkan');
+    } catch (e) {
+      print('🔴 [PENYEDIA_AUTH] Error clearing secure storage: $e');
+    }
 
     _idPengguna = null;
     _namaPengguna = null;
@@ -205,7 +348,10 @@ class PenyediaAuth with ChangeNotifier {
     _tempatLahirPewaris = null;
     _sudahLogin = false;
     _pesanError = null;
+    _twoFactorEnabled = false;
+    _twoFactorVerified = false;
 
+    print('🟢 [PENYEDIA_AUTH] Logout berhasil, semua state direset');
     notifyListeners();
   }
 }

@@ -5,6 +5,8 @@ import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
 
 class HalamanAsetHarta extends StatefulWidget {
+  const HalamanAsetHarta({super.key});
+
   @override
   _HalamanAsetHartaState createState() => _HalamanAsetHartaState();
 }
@@ -35,7 +37,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
       body: RefreshIndicator(
         onRefresh: _muatData,
         child: penyediaWarisan.sedangMemuat
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : penyediaWarisan.daftarAset.isEmpty
                 ? _buatTampilanKosong()
                 : Column(
@@ -43,7 +45,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                       _buatRingkasanAset(penyediaWarisan.daftarAset),
                       Expanded(
                         child: ListView.builder(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           itemCount: penyediaWarisan.daftarAset.length,
                           itemBuilder: (context, index) {
                             final aset = penyediaWarisan.daftarAset[index];
@@ -56,15 +58,15 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _tampilkanDialogTambahAset(context),
-        icon: Icon(Icons.add),
-        label: Text('Tambah Aset'),
-        backgroundColor: Color(0xFF00796B),
+        icon: const Icon(Icons.add),
+        label: const Text('Tambah Aset'),
+        backgroundColor: const Color(0xFF00796B),
       ),
     );
   }
 
   Widget _buatTampilanKosong() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -112,10 +114,10 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     }
 
     return Container(
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Color(0xFF004D40), Color(0xFF00796B)],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -123,28 +125,28 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
           BoxShadow(
             color: Colors.teal.withOpacity(0.3),
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         children: [
-          Text(
+          const Text(
             'Total Nilai Aset Disetujui',
             style: TextStyle(color: Colors.white70, fontSize: 14),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             _formatRupiah(totalDisetujui),
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 28,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 16),
-          Divider(color: Colors.white30),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
+          const Divider(color: Colors.white30),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -174,22 +176,22 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.2),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             nilai,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        SizedBox(height: 4),
-        Text(label, style: TextStyle(color: Colors.white70, fontSize: 12)),
+        const SizedBox(height: 4),
+        Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
       ],
     );
   }
@@ -214,47 +216,47 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     }
 
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: () => _tampilkanDetailAset(context, aset),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Color(0xFF00796B).withOpacity(0.1),
+                      color: const Color(0xFF00796B).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
                       _dapatkanIkonJenisAset(aset['jenis_aset']),
-                      color: Color(0xFF00796B),
+                      color: const Color(0xFF00796B),
                       size: 24,
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           aset['nama_aset'] ?? 'Unknown',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           _dapatkanLabelJenisAset(aset['jenis_aset']),
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          style: const TextStyle(color: Colors.grey, fontSize: 12),
                         ),
                       ],
                     ),
@@ -293,11 +295,11 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: warnaStatus.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -313,22 +315,22 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Nilai Aset',
                         style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         _formatRupiah(
                             double.tryParse(aset['nilai'].toString()) ?? 0.0),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                           color: Color(0xFF00796B),
@@ -340,12 +342,12 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                     ElevatedButton.icon(
                       onPressed: () =>
                           _tampilkanDialogVerifikasi(context, aset),
-                      icon: Icon(Icons.check_circle_outline, size: 18),
-                      label: Text('Verifikasi'),
+                      icon: const Icon(Icons.check_circle_outline, size: 18),
+                      label: const Text('Verifikasi'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
                         foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,
                         ),
@@ -356,7 +358,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
               if (aset['keterangan'] != null &&
                   aset['keterangan'].toString().isNotEmpty)
                 Padding(
-                  padding: EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     aset['keterangan'],
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -364,10 +366,10 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Diusulkan oleh: ${aset['nama_pengusul'] ?? 'Unknown'}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 11,
                   color: Colors.grey,
                   fontStyle: FontStyle.italic,
@@ -438,26 +440,26 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: Text('Tambah Aset Harta'),
+          title: const Text('Tambah Aset Harta'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: pengendaliNama,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Nama Aset',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Jenis Aset',
                     border: OutlineInputBorder(),
                   ),
-                  value: jenisAsetTerpilih,
-                  items: [
+                  initialValue: jenisAsetTerpilih,
+                  items: const [
                     DropdownMenuItem(value: 'tanah', child: Text('Tanah')),
                     DropdownMenuItem(value: 'rumah', child: Text('Rumah')),
                     DropdownMenuItem(
@@ -474,21 +476,21 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                     setState(() => jenisAsetTerpilih = nilai);
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: pengendaliNilai,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Nilai Aset (Rp)',
                     border: OutlineInputBorder(),
                     prefixText: 'Rp ',
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: pengendaliKeterangan,
                   maxLines: 3,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Keterangan (Opsional)',
                     border: OutlineInputBorder(),
                   ),
@@ -499,7 +501,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -507,7 +509,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                     jenisAsetTerpilih == null ||
                     pengendaliNilai.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Semua field harus diisi')),
+                    const SnackBar(content: Text('Semua field harus diisi')),
                   );
                   return;
                 }
@@ -541,7 +543,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   ),
                 );
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         ),
@@ -573,13 +575,13 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
               if (aset['keterangan'] != null &&
                   aset['keterangan'].toString().isNotEmpty)
                 Padding(
-                  padding: EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.only(top: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Keterangan:  ',
+                      const Text('Keterangan:  ',
                           style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(aset['keterangan']),
                     ],
                   ),
@@ -590,7 +592,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Tutup'),
+            child: const Text('Tutup'),
           ),
           if (aset['status_verifikasi'] == 'menunggu')
             ElevatedButton(
@@ -598,7 +600,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                 Navigator.pop(context);
                 _tampilkanDialogVerifikasi(context, aset);
               },
-              child: Text('Verifikasi'),
+              child: const Text('Verifikasi'),
             ),
         ],
       ),
@@ -607,7 +609,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
 
   Widget _buatBarisDetail(String label, String nilai) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -615,10 +617,10 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
             width: 120,
             child: Text(
               label,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Text(':  '),
+          const Text(':  '),
           Expanded(child: Text(nilai)),
         ],
       ),
@@ -635,16 +637,16 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Verifikasi Aset'),
+        title: const Text('Verifikasi Aset'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('Apakah Anda menyetujui aset "${aset['nama_aset']}"?'),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: pengendaliCatatan,
               maxLines: 3,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Catatan (Opsional)',
                 border: OutlineInputBorder(),
               ),
@@ -654,7 +656,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal'),
+            child: const Text('Batal'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -662,7 +664,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   context, aset, false, pengendaliCatatan.text);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text('Tolak'),
+            child: const Text('Tolak'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -670,7 +672,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   context, aset, true, pengendaliCatatan.text);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-            child: Text('Setuju'),
+            child: const Text('Setuju'),
           ),
         ],
       ),
@@ -716,7 +718,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
   void _tampilkanDialogEditAset(
       BuildContext context, Map<String, dynamic> aset) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Fitur edit akan segera ditambahkan'),
         backgroundColor: Colors.orange,
       ),
@@ -728,13 +730,13 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Hapus Aset'),
+        title: const Text('Hapus Aset'),
         content: Text(
             'Apakah Anda yakin ingin menghapus aset "${aset['nama_aset']}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal'),
+            child: const Text('Batal'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -760,7 +762,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
               );
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text('Hapus'),
+            child: const Text('Hapus'),
           ),
         ],
       ),

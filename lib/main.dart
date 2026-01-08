@@ -6,10 +6,12 @@ import 'penyedia/penyedia_auth.dart';
 import 'penyedia/penyedia_warisan.dart';
 
 void main() {
-  runApp(AplikasiWarisan());
+  runApp(const AplikasiWarisan());
 }
 
 class AplikasiWarisan extends StatelessWidget {
+  const AplikasiWarisan({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -22,11 +24,11 @@ class AplikasiWarisan extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.teal,
-          primaryColor: Color(0xFF00796B),
-          scaffoldBackgroundColor: Color(0xFFF5F5F5),
+          primaryColor: const Color(0xFF00796B),
+          scaffoldBackgroundColor: const Color(0xFFF5F5F5),
           textTheme: GoogleFonts.poppinsTextTheme(),
           appBarTheme: AppBarTheme(
-            backgroundColor: Color(0xFF00796B),
+            backgroundColor: const Color(0xFF00796B),
             elevation: 0,
             centerTitle: true,
             titleTextStyle: GoogleFonts.poppins(
@@ -37,9 +39,9 @@ class AplikasiWarisan extends StatelessWidget {
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF00796B),
+              backgroundColor: const Color(0xFF00796B),
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -59,12 +61,12 @@ class AplikasiWarisan extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Color(0xFF00796B), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF00796B), width: 2),
             ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           ),
         ),
-        home: HalamanSplash(),
+        home: const HalamanSplash(),
       ),
     );
   }

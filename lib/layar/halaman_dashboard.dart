@@ -4,6 +4,8 @@ import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
 
 class HalamanDashboard extends StatefulWidget {
+  const HalamanDashboard({super.key});
+
   @override
   State<HalamanDashboard> createState() => _HalamanDashboardState();
 }
@@ -31,7 +33,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
 
     return SingleChildScrollView(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.center,
@@ -43,25 +45,25 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
           children: [
             // Header dengan sambutan
             Container(
-              padding: EdgeInsets.all(24),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Assalamu\'alaikum,',
                     style: TextStyle(fontSize: 16, color: Colors.white70),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     penyediaAuth.namaPengguna ?? 'Pengguna',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
+                  const SizedBox(height: 8),
+                  const Text(
                     '✨ Kelola warisan dengan adil dan transparan',
                     style: TextStyle(fontSize: 14, color: Colors.white70),
                   ),
@@ -72,7 +74,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
             // Konten utama
             Container(
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xFFF5F5F5),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
@@ -80,16 +82,16 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Data Pewaris Card
                     _buatKartuDataPewaris(penyediaAuth),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                    Text(
+                    const Text(
                       'Menu Utama',
                       style: TextStyle(
                         fontSize: 18,
@@ -97,13 +99,13 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
                         color: Colors.black87,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // Menu Grid
                     GridView.count(
                       crossAxisCount: 2,
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                       children: [
@@ -142,12 +144,12 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
                       ],
                     ),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Statistik
                     _buatKartuStatistik(penyediaWarisan),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
                     // Tips & Info
                     _buatKartuInfo(),
@@ -163,9 +165,9 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
 
   Widget _buatKartuDataPewaris(PenyediaAuth penyediaAuth) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Color(0xFF004D40), Color(0xFF00796B)],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -173,14 +175,14 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
           BoxShadow(
             color: Colors.teal.withOpacity(0.3),
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(Icons.person_outline, color: Colors.white, size: 28),
               SizedBox(width: 12),
@@ -194,14 +196,14 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buatBarisPewaris('Nama', penyediaAuth.namaPewaris ?? '-'),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           _buatBarisPewaris(
             'Tempat, Tanggal Lahir',
             '${penyediaAuth.tempatLahirPewaris ?? '-'}, ${penyediaAuth.tahunLahirPewaris ?? '-'}',
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           _buatBarisPewaris('NIK', penyediaAuth.nikPewaris ?? '-'),
         ],
       ),
@@ -216,14 +218,14 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
           width: 120,
           child: Text(
             label,
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
         ),
-        Text(': ', style: TextStyle(color: Colors.white70)),
+        const Text(': ', style: TextStyle(color: Colors.white70)),
         Expanded(
           child: Text(
             nilai,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -251,11 +253,11 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 8,
@@ -267,27 +269,27 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: warna.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(ikon, size: 32, color: warna),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
               judul,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               subjudul,
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
               textAlign: TextAlign.center,
             ),
           ],
@@ -307,18 +309,18 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
     );
 
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2)),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Ringkasan',
             style: TextStyle(
               fontSize: 16,
@@ -326,7 +328,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
               color: Colors.black87,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -357,7 +359,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
   ) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: warna.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
@@ -365,7 +367,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
         child: Column(
           children: [
             Icon(ikon, color: warna, size: 24),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               nilai,
               style: TextStyle(
@@ -374,10 +376,10 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
                 color: warna,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               label,
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
               textAlign: TextAlign.center,
             ),
           ],
@@ -388,7 +390,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
 
   Widget _buatKartuInfo() {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.amber.shade50,
         borderRadius: BorderRadius.circular(16),
@@ -397,7 +399,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
       child: Row(
         children: [
           Icon(Icons.lightbulb_outline, color: Colors.amber.shade700, size: 28),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -409,7 +411,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
                     color: Colors.amber.shade900,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   'Pastikan semua ahli waris dan aset telah terdaftar sebelum melakukan perhitungan.',
                   style: TextStyle(fontSize: 12, color: Colors.amber.shade800),

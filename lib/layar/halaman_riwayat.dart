@@ -6,6 +6,8 @@ import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
 
 class HalamanRiwayat extends StatefulWidget {
+  const HalamanRiwayat({super.key});
+
   @override
   _HalamanRiwayatState createState() => _HalamanRiwayatState();
 }
@@ -47,11 +49,11 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
       body: RefreshIndicator(
         onRefresh: _muatRiwayat,
         child: _sedangMemuat
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : _daftarRiwayat.isEmpty
                 ? _buatTampilanKosong()
                 : ListView.builder(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     itemCount: _daftarRiwayat.length,
                     itemBuilder: (context, index) {
                       final riwayat = _daftarRiwayat[index];
@@ -63,7 +65,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
   }
 
   Widget _buatTampilanKosong() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -101,7 +103,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
     }
 
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -110,40 +112,40 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
         onTap: () => _tampilkanDetailRiwayat(riwayat),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Color(0xFF00796B).withOpacity(0.1),
+                      color: const Color(0xFF00796B).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.receipt_long,
                       color: Color(0xFF00796B),
                       size: 24,
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Perhitungan #$id',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           _formatTanggal(tanggalParsed),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 12,
                           ),
@@ -151,13 +153,13 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                       ],
                     ),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.chevron_right,
                     color: Colors.grey,
                   ),
                 ],
               ),
-              Divider(height: 24),
+              const Divider(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -170,7 +172,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                   ),
                   Text(
                     _formatRupiah(totalHarta),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF00796B),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -204,7 +206,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => DraggableScrollableSheet(
@@ -214,7 +216,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
         expand: false,
         builder: (context, scrollController) => SingleChildScrollView(
           controller: scrollController,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -228,8 +230,8 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Detail Perhitungan',
                 style: TextStyle(
                   fontSize: 24,
@@ -237,17 +239,17 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                   color: Color(0xFF004D40),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Color(0xFF00796B).withOpacity(0.1),
+                  color: const Color(0xFF00796B).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Total Harta Warisan: ',
                       style: TextStyle(
                         fontSize: 14,
@@ -256,7 +258,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                     ),
                     Text(
                       _formatRupiah(totalHarta),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF00796B),
@@ -265,15 +267,15 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Pembagian Per Ahli Waris:',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               ...pembagian.map((item) {
                 final itemMap = item as Map<String, dynamic>;
                 final String nama = itemMap['nama']?.toString() ?? 'Unknown';
@@ -283,8 +285,8 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                     itemMap['keterangan']?.toString() ?? '';
 
                 return Container(
-                  margin: EdgeInsets.only(bottom: 12),
-                  padding: EdgeInsets.all(16),
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey[300]!),
                     borderRadius: BorderRadius.circular(8),
@@ -298,7 +300,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                           Expanded(
                             child: Text(
                               nama,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
                               ),
@@ -306,7 +308,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                           ),
                           Text(
                             _formatRupiah(bagian),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                               color: Color(0xFF00796B),
@@ -315,7 +317,7 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                         ],
                       ),
                       if (keterangan.isNotEmpty) ...[
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           keterangan,
                           style: TextStyle(
@@ -327,21 +329,21 @@ class _HalamanRiwayatState extends State<HalamanRiwayat> {
                     ],
                   ),
                 );
-              }).toList(),
-              SizedBox(height: 20),
+              }),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text('Tutup'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00796B),
+                    backgroundColor: const Color(0xFF00796B),
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
+                  child: const Text('Tutup'),
                 ),
               ),
             ],

@@ -5,7 +5,7 @@ import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
 
 class HalamanHitung extends StatefulWidget {
-  const HalamanHitung({Key? key}) : super(key: key);
+  const HalamanHitung({super.key});
 
   @override
   _HalamanHitungState createState() => _HalamanHitungState();
@@ -118,7 +118,7 @@ class _HalamanHitungState extends State<HalamanHitung> {
           ...pembagian.map((item) {
             final itemMap = item as Map<String, dynamic>;
             return _buatKartuPembagian(itemMap);
-          }).toList(),
+          }),
           const SizedBox(height: 24),
           Row(
             children: [
@@ -172,8 +172,8 @@ class _HalamanHitungState extends State<HalamanHitung> {
       ),
       child: Column(
         children: [
-          Row(
-            children: const [
+          const Row(
+            children: [
               Icon(Icons.account_balance_wallet, color: Colors.white, size: 32),
               SizedBox(width: 12),
               Text(

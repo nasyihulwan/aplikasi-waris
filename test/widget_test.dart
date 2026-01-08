@@ -7,6 +7,6 @@ import 'package:aplikasi_warisan/main.dart';
 void main() {
   testWidgets('App builds successfully', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(AplikasiWarisan());
+    await tester.pumpWidget(const AplikasiWarisan());
   });
 }

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'halaman_login.dart';
 
 class HalamanSplash extends StatefulWidget {
+  const HalamanSplash({super.key});
+
   @override
   _HalamanSplashState createState() => _HalamanSplashState();
 }
@@ -17,7 +19,7 @@ class _HalamanSplashState extends State<HalamanSplash>
     super.initState();
 
     _pengendaliAnimasi = AnimationController(
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
 
@@ -28,10 +30,10 @@ class _HalamanSplashState extends State<HalamanSplash>
 
     _pengendaliAnimasi.forward();
 
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.of(
         context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => HalamanLogin()));
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const HalamanLogin()));
     });
   }
 
@@ -45,7 +47,7 @@ class _HalamanSplashState extends State<HalamanSplash>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -55,7 +57,7 @@ class _HalamanSplashState extends State<HalamanSplash>
         child: Center(
           child: FadeTransition(
             opacity: _animasiFade,
-            child: Column(
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.account_balance, size: 120, color: Colors.white),

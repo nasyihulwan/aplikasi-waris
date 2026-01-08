@@ -47,6 +47,10 @@ dependencies:
   # URL Launcher (untuk buka link bantuan, dll)
   url_launcher: ^6.2.2
 
+  # Two-Factor Authentication
+  flutter_secure_storage: ^9.0.0 # Secure storage for tokens
+  pinput: ^3.0.1 # OTP input field
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

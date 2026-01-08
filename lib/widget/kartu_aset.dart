@@ -8,12 +8,12 @@ class KartuAset extends StatelessWidget {
   final VoidCallback? onDelete;
 
   const KartuAset({
-    Key? key,
+    super.key,
     required this.aset,
     this.onTap,
     this.onVerifikasi,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,53 +36,53 @@ class KartuAset extends StatelessWidget {
     }
 
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Color(0xFF00796B).withOpacity(0.1),
+                      color: const Color(0xFF00796B).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
                       _dapatkanIkonJenisAset(aset['jenis_aset']),
-                      color: Color(0xFF00796B),
+                      color: const Color(0xFF00796B),
                       size: 24,
                     ),
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           aset['nama_aset'] ?? 'Unknown',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           _dapatkanLabelJenisAset(aset['jenis_aset']),
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          style: const TextStyle(color: Colors.grey, fontSize: 12),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: warnaStatus.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -98,21 +98,21 @@ class KartuAset extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Nilai Aset',
                         style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         _formatRupiah((aset['nilai'] ?? 0).toDouble()),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                           color: Color(0xFF00796B),
@@ -123,12 +123,12 @@ class KartuAset extends StatelessWidget {
                   if (status == 'menunggu' && onVerifikasi != null)
                     ElevatedButton.icon(
                       onPressed: onVerifikasi,
-                      icon: Icon(Icons.check_circle_outline, size: 18),
-                      label: Text('Verifikasi'),
+                      icon: const Icon(Icons.check_circle_outline, size: 18),
+                      label: const Text('Verifikasi'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
                         foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,
                         ),
@@ -139,7 +139,7 @@ class KartuAset extends StatelessWidget {
               if (aset['keterangan'] != null &&
                   aset['keterangan'].toString().isNotEmpty)
                 Padding(
-                  padding: EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.only(top: 12),
                   child: Text(
                     aset['keterangan'],
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -147,10 +147,10 @@ class KartuAset extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Diusulkan oleh: ${aset['nama_pengusul'] ?? 'Unknown'}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 11,
                   color: Colors.grey,
                   fontStyle: FontStyle.italic,
