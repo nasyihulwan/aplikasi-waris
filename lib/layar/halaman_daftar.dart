@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../penyedia/penyedia_auth.dart';
+import '../tema/tema_aplikasi.dart';
 
 class HalamanDaftar extends StatefulWidget {
   const HalamanDaftar({super.key});
@@ -72,18 +74,40 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
     if (sukses) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('✅ Pendaftaran berhasil! Silakan login'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle_outline, color: Colors.white),
+              const SizedBox(width: 8),
+              Text('Pendaftaran berhasil! Silakan login',
+                  style: GoogleFonts.poppins()),
+            ],
+          ),
+          backgroundColor: TemaAplikasi.success,
+          behavior: SnackBarBehavior.floating,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          duration: const Duration(seconds: 3),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('❌ Pendaftaran gagal. Periksa kembali data Anda'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.error_outline, color: Colors.white),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text('Pendaftaran gagal. Periksa kembali data Anda',
+                    style: GoogleFonts.poppins()),
+              ),
+            ],
+          ),
+          backgroundColor: TemaAplikasi.error,
+          behavior: SnackBarBehavior.floating,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -99,7 +123,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
     TextInputType? keyboardType,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 16),
       child: TextFormField(
         controller: c,
         obscureText: isPassword ? _sembunyiPassword : false,
@@ -108,6 +132,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
         inputFormatters:
             isNumber ? [FilteringTextInputFormatter.digitsOnly] : null,
         maxLength: maxLength,
+        style: GoogleFonts.poppins(),
         validator: (v) {
           if (v == null || v.trim().isEmpty) return '$label wajib diisi';
           if (isEmail && !v.contains('@')) return 'Email tidak valid';
@@ -117,15 +142,18 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
           }
           return null;
         },
-        decoration: InputDecoration(
+        decoration: TemaAplikasi.inputDecoration(
           labelText: label,
-          border: const OutlineInputBorder(),
-          counterText: '', // Hilangkan counter text
+          prefixIcon: _getIconForField(label, isEmail, isPassword),
+        ).copyWith(
+          counterText: '',
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
-                    _sembunyiPassword ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.grey,
+                    _sembunyiPassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: TemaAplikasi.textTertiary,
                   ),
                   onPressed: () {
                     setState(() {
@@ -139,180 +167,272 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
     );
   }
 
+  IconData _getIconForField(String label, bool isEmail, bool isPassword) {
+    if (isEmail) return Icons.email_outlined;
+    if (isPassword) return Icons.lock_outline;
+    if (label.toLowerCase().contains('nama')) return Icons.person_outline;
+    if (label.toLowerCase().contains('tahun'))
+      return Icons.calendar_today_outlined;
+    if (label.toLowerCase().contains('tempat')) return Icons.place_outlined;
+    if (label.toLowerCase().contains('alamat')) return Icons.home_outlined;
+    if (label.toLowerCase().contains('nik')) return Icons.badge_outlined;
+    return Icons.edit_outlined;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Daftar Akun Baru'),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header untuk Data Pendaftar
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF00796B).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFF00796B)),
-                ),
+      body: Column(
+        children: [
+          // Header dengan gradient
+          Container(
+            decoration: BoxDecoration(
+              gradient: TemaAplikasi.gradientPrimaryLinear,
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 20, 20),
                 child: Row(
                   children: [
-                    const Icon(Icons.person, color: Color(0xFF00796B), size: 28),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Data Pendaftar (Anda)',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF00796B),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Isi data diri Anda sebagai ahli waris',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
-                      ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon:
+                          const Icon(Icons.arrow_back_ios, color: Colors.white),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              input(nama, 'Nama Lengkap Anda'),
-              input(email, 'Email Anda',
-                  isEmail: true, keyboardType: TextInputType.emailAddress),
-              input(password, 'Password (min. 6 karakter)', isPassword: true),
-              input(tempatLahir, 'Tempat Lahir Anda'),
-              input(tahunLahir, 'Tahun Lahir Anda (YYYY)',
-                  isNumber: true, maxLength: 4),
-              input(alamat, 'Alamat Lengkap Anda',
-                  keyboardType: TextInputType.multiline),
-              input(nik, 'NIK Anda (16 digit)', isNumber: true, maxLength: 16),
-
-              const SizedBox(height: 32),
-              const Divider(thickness: 2),
-              const SizedBox(height: 20),
-
-              // Header untuk Data Pewaris
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.person_outline, color: Colors.orange, size: 28),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Data Pewaris (Yang Meninggal)',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.orange[900],
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Isi data orang yang meninggal dunia',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              input(namaPewaris, 'Nama Lengkap Pewaris'),
-              input(tempatLahirPewaris, 'Tempat Lahir Pewaris'),
-              input(tahunLahirPewaris, 'Tahun Lahir Pewaris (YYYY)',
-                  isNumber: true, maxLength: 4),
-              input(nikPewaris, 'NIK Pewaris (16 digit)',
-                  isNumber: true, maxLength: 16),
-
-              const SizedBox(height: 24),
-
-              // Tombol Daftar
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _loading ? null : daftar,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00796B),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: _loading
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Text(
-                          'Daftar',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Info tambahan
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.info_outline, color: Colors.blue, size: 20),
-                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Pastikan data yang Anda isi benar. NIK harus 16 digit angka.',
-                        style: TextStyle(fontSize: 12, color: Colors.blue[900]),
+                        'Daftar Akun Baru',
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+
+          // Body
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header untuk Data Pendaftar
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            TemaAplikasi.primary.withOpacity(0.1),
+                            TemaAplikasi.primaryDark.withOpacity(0.05),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                            color: TemaAplikasi.primary.withOpacity(0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              gradient: TemaAplikasi.gradientPrimaryLinear,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.person,
+                                color: Colors.white, size: 24),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Data Pendaftar (Anda)',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: TemaAplikasi.primaryDark,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  'Isi data diri Anda sebagai ahli waris',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    color: TemaAplikasi.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    input(nama, 'Nama Lengkap Anda'),
+                    input(email, 'Email Anda',
+                        isEmail: true,
+                        keyboardType: TextInputType.emailAddress),
+                    input(password, 'Password (min. 6 karakter)',
+                        isPassword: true),
+                    input(tempatLahir, 'Tempat Lahir Anda'),
+                    input(tahunLahir, 'Tahun Lahir Anda (YYYY)',
+                        isNumber: true, maxLength: 4),
+                    input(alamat, 'Alamat Lengkap Anda',
+                        keyboardType: TextInputType.multiline),
+                    input(nik, 'NIK Anda (16 digit)',
+                        isNumber: true, maxLength: 16),
+
+                    const SizedBox(height: 24),
+
+                    // Divider dengan style
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Container(
+                                height: 1, color: TemaAplikasi.divider)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Icon(Icons.arrow_downward,
+                              color: TemaAplikasi.textTertiary, size: 20),
+                        ),
+                        Expanded(
+                            child: Container(
+                                height: 1, color: TemaAplikasi.divider)),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // Header untuk Data Pewaris
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            TemaAplikasi.warning.withOpacity(0.15),
+                            TemaAplikasi.warning.withOpacity(0.05),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                            color: TemaAplikasi.warning.withOpacity(0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: TemaAplikasi.warning,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.person_outline,
+                                color: Colors.white, size: 24),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Data Pewaris (Yang Meninggal)',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFFE65100),
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  'Isi data orang yang meninggal dunia',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    color: TemaAplikasi.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    input(namaPewaris, 'Nama Lengkap Pewaris'),
+                    input(tempatLahirPewaris, 'Tempat Lahir Pewaris'),
+                    input(tahunLahirPewaris, 'Tahun Lahir Pewaris (YYYY)',
+                        isNumber: true, maxLength: 4),
+                    input(nikPewaris, 'NIK Pewaris (16 digit)',
+                        isNumber: true, maxLength: 16),
+
+                    const SizedBox(height: 24),
+
+                    // Tombol Daftar
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _loading ? null : daftar,
+                        style: TemaAplikasi.primaryButton,
+                        child: _loading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                'Daftar Sekarang',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Info tambahan
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: TemaAplikasi.infoLightBox,
+                      child: Row(
+                        children: [
+                          Icon(Icons.info_outline,
+                              color: TemaAplikasi.info, size: 20),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              'Pastikan data yang Anda isi benar. NIK harus 16 digit angka.',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                color: TemaAplikasi.info,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

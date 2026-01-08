@@ -1,10 +1,11 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import '../layanan/layanan_2fa.dart';
 import '../penyedia/penyedia_auth.dart';
+import '../tema/tema_aplikasi.dart';
 import 'halaman_utama.dart';
 
 /// Halaman untuk verifikasi Two-Factor Authentication saat login
@@ -35,17 +36,12 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
   int _retryCount = 0;
   static const int _maxRetries = 5;
 
-  // Timer untuk countdown OTP refresh
-  Timer? _countdownTimer;
-  int _countdown = 30;
-
   @override
   void initState() {
     super.initState();
     print(
         '🔐 [VERIFY-2FA] Halaman verifikasi 2FA diinisialisasi untuk user ${widget.userId}');
     print('🔐 [VERIFY-2FA] Email user: ${widget.emailUser}');
-    _startCountdown();
     // Auto focus ke input field
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) {
@@ -59,28 +55,7 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
     print('🔐 [VERIFY-2FA] Halaman verifikasi 2FA ditutup');
     _pinController.dispose();
     _pinFocusNode.dispose();
-    _countdownTimer?.cancel();
     super.dispose();
-  }
-
-  /// Memulai countdown timer
-  void _startCountdown() {
-    _countdownTimer?.cancel();
-    setState(() {
-      _countdown = 30;
-    });
-
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        setState(() {
-          if (_countdown > 0) {
-            _countdown--;
-          } else {
-            _countdown = 30; // Reset ke 30 detik
-          }
-        });
-      }
-    });
   }
 
   /// Verifikasi kode OTP
@@ -171,14 +146,13 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
               color: Colors.white,
             ),
             const SizedBox(width: 8),
-            Expanded(child: Text(message)),
+            Expanded(child: Text(message, style: GoogleFonts.poppins())),
           ],
         ),
-        backgroundColor:
-            isError ? const Color(0xFFC62828) : const Color(0xFF2E7D32),
+        backgroundColor: isError ? TemaAplikasi.error : TemaAplikasi.success,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );
@@ -189,26 +163,28 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Batalkan Login?'),
-        content: const Text(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text('Batalkan Login?',
+            style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+        content: Text(
           'Anda akan kembali ke halaman login. Lanjutkan?',
+          style: GoogleFonts.poppins(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Tidak'),
+            child: Text('Tidak',
+                style: GoogleFonts.poppins(color: TemaAplikasi.textTertiary)),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
               Navigator.of(context).pop(); // Kembali ke login
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
-            child: const Text(
+            style: TemaAplikasi.dangerButton,
+            child: Text(
               'Ya, Batalkan',
-              style: TextStyle(color: Colors.white),
+              style: GoogleFonts.poppins(color: Colors.white),
             ),
           ),
         ],
@@ -221,12 +197,8 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF00695C), Color(0xFF004D40)],
-          ),
+        decoration: BoxDecoration(
+          gradient: TemaAplikasi.gradientPrimaryLinear,
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -249,9 +221,9 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
+                Text(
                   'Verifikasi 2FA',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -260,7 +232,7 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                 const SizedBox(height: 8),
                 Text(
                   widget.emailUser ?? 'Verifikasi akun Anda',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 14,
                     color: Colors.white.withOpacity(0.9),
                   ),
@@ -274,27 +246,49 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 15,
-                        offset: Offset(0, 5),
+                        color: Colors.black.withOpacity(0.15),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
                       ),
                     ],
                   ),
                   child: Column(
                     children: [
-                      // Countdown timer
-                      _buildCountdownTimer(),
+                      // Info kode berubah setiap 30 detik (tanpa countdown)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: TemaAplikasi.success.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.info_outline,
+                                color: TemaAplikasi.success, size: 18),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Kode berganti setiap 30 detik',
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                color: TemaAplikasi.success,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
                       const SizedBox(height: 24),
 
                       // Instructions
-                      const Text(
+                      Text(
                         'Masukkan kode 6 digit dari\nGoogle Authenticator',
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 16,
-                          color: Color(0xFF424242),
+                          color: TemaAplikasi.textSecondary,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -310,23 +304,24 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFEBEE),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: const Color(0xFFEF9A9A)),
+                            color: TemaAplikasi.error.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                                color: TemaAplikasi.error.withOpacity(0.3)),
                           ),
                           child: Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.error_outline,
-                                color: Color(0xFFC62828),
+                                color: TemaAplikasi.error,
                                 size: 20,
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   _errorMessage!,
-                                  style: const TextStyle(
-                                    color: Color(0xFFC62828),
+                                  style: GoogleFonts.poppins(
+                                    color: TemaAplikasi.error,
                                     fontSize: 13,
                                   ),
                                 ),
@@ -341,10 +336,10 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                         const SizedBox(height: 12),
                         Text(
                           'Percobaan: $_retryCount / $_maxRetries',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             color: _retryCount >= _maxRetries - 1
-                                ? const Color(0xFFC62828)
-                                : const Color(0xFF616161),
+                                ? TemaAplikasi.error
+                                : TemaAplikasi.textTertiary,
                             fontSize: 12,
                           ),
                         ),
@@ -360,14 +355,7 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                               (_isVerifying || _retryCount >= _maxRetries)
                                   ? null
                                   : _verifyCode,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF00695C),
-                            disabledBackgroundColor: const Color(0xFFBDBDBD),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
+                          style: TemaAplikasi.primaryButton,
                           child: _isVerifying
                               ? const SizedBox(
                                   height: 24,
@@ -377,9 +365,9 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                                     strokeWidth: 2,
                                   ),
                                 )
-                              : const Text(
+                              : Text(
                                   'Verifikasi',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -403,9 +391,10 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                             _pinFocusNode.requestFocus();
                           },
                           icon: const Icon(Icons.refresh, size: 18),
-                          label: const Text('Coba lagi'),
+                          label:
+                              Text('Coba lagi', style: GoogleFonts.poppins()),
                           style: TextButton.styleFrom(
-                            foregroundColor: const Color(0xFF00695C),
+                            foregroundColor: TemaAplikasi.primary,
                           ),
                         ),
                     ],
@@ -419,7 +408,7 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
                     children: [
@@ -431,7 +420,7 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                       const SizedBox(height: 8),
                       Text(
                         'Tidak bisa akses authenticator?',
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           color: Colors.white.withOpacity(0.95),
                           fontSize: 14,
                         ),
@@ -442,9 +431,9 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                           print('🔐 [VERIFY-2FA] User membuka opsi pemulihan');
                           _showRecoveryOptions();
                         },
-                        child: const Text(
+                        child: Text(
                           'Lihat opsi pemulihan',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
@@ -472,52 +461,6 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildCountdownTimer() {
-    final progress = _countdown / 30;
-    final color = _countdown <= 5
-        ? const Color(0xFFC62828)
-        : _countdown <= 10
-            ? const Color(0xFFE65100)
-            : const Color(0xFF00695C);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 40,
-          height: 40,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CircularProgressIndicator(
-                value: progress,
-                strokeWidth: 3,
-                backgroundColor: const Color(0xFFE0E0E0),
-                valueColor: AlwaysStoppedAnimation<Color>(color),
-              ),
-              Text(
-                '$_countdown',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        const Text(
-          'Kode berganti setiap 30 detik',
-          style: TextStyle(
-            fontSize: 12,
-            color: Color(0xFF616161),
-          ),
-        ),
-      ],
     );
   }
 

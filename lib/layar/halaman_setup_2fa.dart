@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import '../layanan/layanan_2fa.dart';
+import '../tema/tema_aplikasi.dart';
 import 'halaman_utama.dart';
 
 /// Halaman untuk setup Two-Factor Authentication (2FA)
@@ -169,7 +171,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
         ),
         content: SingleChildScrollView(
           child: Column(
@@ -178,31 +180,31 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2E7D32).withOpacity(0.15),
+                  gradient: TemaAplikasi.gradientSuccess,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.check_circle,
-                  size: 64,
-                  color: Color(0xFF2E7D32),
+                  size: 56,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 '2FA Berhasil Diaktifkan!',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B5E20),
+                  color: TemaAplikasi.success,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'Akun Anda sekarang lebih aman dengan Two-Factor Authentication.',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   fontSize: 14,
-                  color: Color(0xFF424242),
+                  color: TemaAplikasi.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -212,36 +214,32 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                 const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF3E0),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFFF9800)),
-                  ),
+                  decoration: TemaAplikasi.warningLightBox,
                   child: Column(
                     children: [
-                      const Row(
+                      Row(
                         children: [
                           Icon(Icons.warning_amber_rounded,
-                              color: Color(0xFFE65100), size: 24),
-                          SizedBox(width: 8),
+                              color: TemaAplikasi.warning, size: 24),
+                          const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               'SIMPAN BACKUP CODES!',
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFFE65100),
+                                color: const Color(0xFFE65100),
                               ),
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 12),
-                      const Text(
+                      Text(
                         'Simpan kode-kode ini di tempat aman. Gunakan untuk login jika kehilangan akses ke Google Authenticator.',
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 12,
-                          color: Color(0xFF424242),
+                          color: TemaAplikasi.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -249,7 +247,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Column(
                           children: _backupCodes!
@@ -258,11 +256,10 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                                         const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       code,
-                                      style: const TextStyle(
-                                        fontFamily: 'monospace',
+                                      style: GoogleFonts.sourceCodePro(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
-                                        color: Color(0xFF1B5E20),
+                                        color: TemaAplikasi.success,
                                         letterSpacing: 2,
                                       ),
                                     ),
@@ -274,10 +271,14 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                       OutlinedButton.icon(
                         onPressed: _copyAllBackupCodes,
                         icon: const Icon(Icons.copy, size: 18),
-                        label: const Text('Salin Semua Kode'),
+                        label: Text('Salin Semua Kode',
+                            style: GoogleFonts.poppins()),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFF00695C),
-                          side: const BorderSide(color: Color(0xFF00695C)),
+                          foregroundColor: TemaAplikasi.primary,
+                          side: BorderSide(color: TemaAplikasi.primary),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                       ),
                     ],
@@ -299,17 +300,12 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                   (route) => false,
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF00695C),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
+              style: TemaAplikasi.primaryButton,
+              child: Text(
                 'Lanjutkan',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   fontSize: 16,
+                  fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
@@ -328,17 +324,18 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
       print('🔐 [SETUP-2FA] Semua backup codes disalin ke clipboard');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.white),
-              SizedBox(width: 8),
-              Text('Backup codes berhasil disalin!'),
+              const Icon(Icons.check_circle, color: Colors.white),
+              const SizedBox(width: 8),
+              Text('Backup codes berhasil disalin!',
+                  style: GoogleFonts.poppins()),
             ],
           ),
-          backgroundColor: const Color(0xFF2E7D32),
+          backgroundColor: TemaAplikasi.success,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       );
@@ -357,14 +354,13 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
               color: Colors.white,
             ),
             const SizedBox(width: 8),
-            Expanded(child: Text(message)),
+            Expanded(child: Text(message, style: GoogleFonts.poppins())),
           ],
         ),
-        backgroundColor:
-            isError ? const Color(0xFFC62828) : const Color(0xFF2E7D32),
+        backgroundColor: isError ? TemaAplikasi.error : TemaAplikasi.success,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );
@@ -399,194 +395,222 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Setup 2FA'),
-        backgroundColor: const Color(0xFF00695C),
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE0F2F1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF80CBC4)),
+      body: Column(
+        children: [
+          // Header dengan gradient
+          Container(
+            decoration: BoxDecoration(
+              gradient: TemaAplikasi.gradientPrimaryLinear,
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 20, 20),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon:
+                          const Icon(Icons.arrow_back_ios, color: Colors.white),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Setup 2FA',
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Row(
+            ),
+          ),
+
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // Header
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF00695C),
-                      borderRadius: BorderRadius.circular(8),
+                      gradient: LinearGradient(
+                        colors: [
+                          TemaAplikasi.primary.withOpacity(0.1),
+                          TemaAplikasi.primaryDark.withOpacity(0.05),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                          color: TemaAplikasi.primary.withOpacity(0.3)),
                     ),
-                    child: const Icon(
-                      Icons.security,
-                      color: Colors.white,
-                      size: 28,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text(
-                          'Two-Factor Authentication',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF00695C),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            gradient: TemaAplikasi.gradientPrimaryLinear,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.security,
+                            color: Colors.white,
+                            size: 28,
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Text(
-                          'Tambahkan lapisan keamanan ekstra',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xFF424242),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Two-Factor Authentication',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: TemaAplikasi.primaryDark,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Tambahkan lapisan keamanan ekstra',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  color: TemaAplikasi.textSecondary,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
+
+                  const SizedBox(height: 32),
+
+                  // QR Code Section
+                  if (_isLoadingQR)
+                    _buildLoadingQR()
+                  else if (_errorMessage != null && _qrCodeBase64 == null)
+                    _buildErrorQR()
+                  else
+                    _buildQRCode(),
+
+                  const SizedBox(height: 32),
+
+                  // Instructions
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: TemaAplikasi.infoLightBox,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.info_outline, color: TemaAplikasi.info),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Cara Mengaktifkan',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: TemaAplikasi.info,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        _buildInstructionStep(
+                          '1',
+                          'Download Google Authenticator dari Play Store atau App Store',
+                        ),
+                        _buildInstructionStep(
+                          '2',
+                          'Buka aplikasi dan scan QR Code di atas',
+                        ),
+                        _buildInstructionStep(
+                          '3',
+                          'Masukkan kode 6 digit yang muncul di aplikasi',
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // PIN Input
+                  Text(
+                    'Masukkan Kode dari Authenticator',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: TemaAplikasi.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildPinInput(),
+
+                  const SizedBox(height: 24),
+
+                  // Verify Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: (_isVerifying ||
+                              _isLoadingQR ||
+                              _qrCodeBase64 == null)
+                          ? null
+                          : _verifyAndActivate,
+                      style: TemaAplikasi.primaryButton,
+                      child: _isVerifying
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : Text(
+                              'Verifikasi & Aktifkan 2FA',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Skip button
+                  TextButton(
+                    onPressed: () {
+                      print('🔐 [SETUP-2FA] User melewati setup 2FA');
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => const HalamanUtama()),
+                        (route) => false,
+                      );
+                    },
+                    child: Text(
+                      'Lewati untuk sekarang',
+                      style: GoogleFonts.poppins(
+                        color: TemaAplikasi.textTertiary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 32),
-
-            // QR Code Section
-            if (_isLoadingQR)
-              _buildLoadingQR()
-            else if (_errorMessage != null && _qrCodeBase64 == null)
-              _buildErrorQR()
-            else
-              _buildQRCode(),
-
-            const SizedBox(height: 32),
-
-            // Instructions
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE3F2FD),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF64B5F6)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.info_outline, color: const Color(0xFF1565C0)),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Cara Mengaktifkan',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1565C0),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  _buildInstructionStep(
-                    '1',
-                    'Download Google Authenticator dari Play Store atau App Store',
-                  ),
-                  _buildInstructionStep(
-                    '2',
-                    'Buka aplikasi dan scan QR Code di atas',
-                  ),
-                  _buildInstructionStep(
-                    '3',
-                    'Masukkan kode 6 digit yang muncul di aplikasi',
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // PIN Input
-            const Text(
-              'Masukkan Kode dari Authenticator',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF212121),
-              ),
-            ),
-            const SizedBox(height: 16),
-            _buildPinInput(),
-
-            const SizedBox(height: 24),
-
-            // Verify Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed:
-                    (_isVerifying || _isLoadingQR || _qrCodeBase64 == null)
-                        ? null
-                        : _verifyAndActivate,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF00695C),
-                  disabledBackgroundColor: const Color(0xFFBDBDBD),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: _isVerifying
-                    ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Text(
-                        'Verifikasi & Aktifkan 2FA',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Skip button
-            TextButton(
-              onPressed: () {
-                print('🔐 [SETUP-2FA] User melewati setup 2FA');
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => const HalamanUtama()),
-                  (route) => false,
-                );
-              },
-              child: const Text(
-                'Lewati untuk sekarang',
-                style: TextStyle(
-                  color: Color(0xFF616161),
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -596,21 +620,21 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
       height: 200,
       width: 200,
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(12),
+        color: TemaAplikasi.background,
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(
-              color: Color(0xFF00695C),
+              color: TemaAplikasi.primary,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'Memuat QR Code...',
-              style: TextStyle(
-                color: Color(0xFF616161),
+              style: GoogleFonts.poppins(
+                color: TemaAplikasi.textSecondary,
                 fontSize: 14,
               ),
             ),
@@ -625,24 +649,24 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
       height: 200,
       width: 200,
       decoration: BoxDecoration(
-        color: const Color(0xFFFFEBEE),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFEF9A9A)),
+        color: TemaAplikasi.error.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: TemaAplikasi.error.withOpacity(0.3)),
       ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
               size: 48,
-              color: Color(0xFFC62828),
+              color: TemaAplikasi.error,
             ),
             const SizedBox(height: 12),
             Text(
               _errorMessage ?? 'Gagal memuat QR Code',
-              style: const TextStyle(
-                color: Color(0xFFC62828),
+              style: GoogleFonts.poppins(
+                color: TemaAplikasi.error,
                 fontSize: 12,
               ),
               textAlign: TextAlign.center,
@@ -651,9 +675,9 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
             TextButton.icon(
               onPressed: _loadQRCode,
               icon: const Icon(Icons.refresh, size: 18),
-              label: const Text('Coba Lagi'),
+              label: Text('Coba Lagi', style: GoogleFonts.poppins()),
               style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFF00695C),
+                foregroundColor: TemaAplikasi.primary,
               ),
             ),
           ],
@@ -669,17 +693,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
+          decoration: TemaAplikasi.kartuDekorasi,
           child: qrBytes != null
               ? Image.memory(
                   qrBytes,
@@ -692,7 +706,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                     return Container(
                       width: 200,
                       height: 200,
-                      color: const Color(0xFFF5F5F5),
+                      color: TemaAplikasi.background,
                       child: const Center(
                         child: Icon(
                           Icons.broken_image,

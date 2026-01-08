@@ -10,6 +10,10 @@ class PenyediaAuth with ChangeNotifier {
   String? _idPengguna;
   String? _namaPengguna;
   String? _email;
+  String? _nik;
+  String? _tahunLahir;
+  String? _tempatLahir;
+  String? _alamat;
   String? _namaPewaris;
   String? _nikPewaris;
   String? _tahunLahirPewaris;
@@ -32,6 +36,10 @@ class PenyediaAuth with ChangeNotifier {
   String? get idPengguna => _idPengguna;
   String? get namaPengguna => _namaPengguna;
   String? get email => _email;
+  String? get nik => _nik;
+  String? get tahunLahir => _tahunLahir;
+  String? get tempatLahir => _tempatLahir;
+  String? get alamat => _alamat;
   String? get namaPewaris => _namaPewaris;
   String? get nikPewaris => _nikPewaris;
   String? get tahunLahirPewaris => _tahunLahirPewaris;
@@ -57,6 +65,10 @@ class PenyediaAuth with ChangeNotifier {
     _idPengguna = prefs.getString('id_pengguna');
     _namaPengguna = prefs.getString('nama_pengguna');
     _email = prefs.getString('email');
+    _nik = prefs.getString('nik');
+    _tahunLahir = prefs.getString('tahun_lahir');
+    _tempatLahir = prefs.getString('tempat_lahir');
+    _alamat = prefs.getString('alamat');
     _namaPewaris = prefs.getString('nama_pewaris');
     _nikPewaris = prefs.getString('nik_pewaris');
     _tahunLahirPewaris = prefs.getString('tahun_lahir_pewaris');
@@ -68,6 +80,7 @@ class PenyediaAuth with ChangeNotifier {
     print('   - id_pengguna: $_idPengguna');
     print('   - nama_pengguna: $_namaPengguna');
     print('   - email: $_email');
+    print('   - nik: $_nik');
     print('   - sudah_login: $_sudahLogin');
     print('   - tanyakan_2fa: $_tanyakan2FA');
 
@@ -323,6 +336,77 @@ class PenyediaAuth with ChangeNotifier {
     return perlu;
   }
 
+  /// Ambil profil pengguna dari database
+  Future<Map<String, dynamic>> ambilProfil() async {
+    if (_idPengguna == null) {
+      return {'sukses': false, 'pesan': 'ID Pengguna tidak ditemukan'};
+    }
+
+    print('👤 [PENYEDIA_AUTH] Mengambil profil dari server...');
+    final hasil = await LayananApi.ambilProfil(int.parse(_idPengguna!));
+
+    if (hasil['sukses'] == true) {
+      print('🟢 [PENYEDIA_AUTH] Profil berhasil diambil');
+    } else {
+      print('🔴 [PENYEDIA_AUTH] Gagal mengambil profil: ${hasil['pesan']}');
+    }
+
+    return hasil;
+  }
+
+  /// Update profil pengguna
+  Future<Map<String, dynamic>> updateProfil({
+    required String nik,
+    required String namaLengkap,
+    required String tahunLahir,
+    required String tempatLahir,
+    required String alamat,
+  }) async {
+    if (_idPengguna == null) {
+      return {'sukses': false, 'pesan': 'ID Pengguna tidak ditemukan'};
+    }
+
+    print('👤 [PENYEDIA_AUTH] Mengupdate profil...');
+    print('   - nik: $nik');
+    print('   - nama_lengkap: $namaLengkap');
+    print('   - tahun_lahir: $tahunLahir');
+    print('   - tempat_lahir: $tempatLahir');
+    print('   - alamat: $alamat');
+
+    final hasil = await LayananApi.updateProfil(
+      idPengguna: int.parse(_idPengguna!),
+      nik: nik,
+      namaLengkap: namaLengkap,
+      tahunLahir: tahunLahir,
+      tempatLahir: tempatLahir,
+      alamat: alamat,
+    );
+
+    if (hasil['sukses'] == true) {
+      // Update local state
+      _nik = nik;
+      _namaPengguna = namaLengkap;
+      _tahunLahir = tahunLahir;
+      _tempatLahir = tempatLahir;
+      _alamat = alamat;
+
+      // Simpan ke SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('nik', nik);
+      await prefs.setString('nama_pengguna', namaLengkap);
+      await prefs.setString('tahun_lahir', tahunLahir);
+      await prefs.setString('tempat_lahir', tempatLahir);
+      await prefs.setString('alamat', alamat);
+
+      print('🟢 [PENYEDIA_AUTH] Profil berhasil diupdate');
+      notifyListeners();
+    } else {
+      print('🔴 [PENYEDIA_AUTH] Gagal update profil: ${hasil['pesan']}');
+    }
+
+    return hasil;
+  }
+
   Future<void> logout() async {
     print('👤 [PENYEDIA_AUTH] Logout dipanggil');
 
@@ -342,6 +426,10 @@ class PenyediaAuth with ChangeNotifier {
     _idPengguna = null;
     _namaPengguna = null;
     _email = null;
+    _nik = null;
+    _tahunLahir = null;
+    _tempatLahir = null;
+    _alamat = null;
     _namaPewaris = null;
     _nikPewaris = null;
     _tahunLahirPewaris = null;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../penyedia/penyedia_auth.dart';
+import '../tema/tema_aplikasi.dart';
 import 'halaman_daftar.dart';
 import 'halaman_utama.dart';
 import 'halaman_setup_2fa.dart';
@@ -99,14 +101,15 @@ class _HalamanLoginState extends State<HalamanLogin> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                      penyediaAuth.pesanError ?? 'Email atau password salah'),
+                      penyediaAuth.pesanError ?? 'Email atau password salah',
+                      style: GoogleFonts.poppins()),
                 ),
               ],
             ),
-            backgroundColor: const Color(0xFFC62828),
+            backgroundColor: TemaAplikasi.error,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
         );
@@ -127,30 +130,30 @@ class _HalamanLoginState extends State<HalamanLogin> {
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
           ),
           title: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE0F2F1),
-                  borderRadius: BorderRadius.circular(8),
+                  gradient: TemaAplikasi.gradientPrimaryLinear,
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
                   Icons.security,
-                  color: Color(0xFF00695C),
+                  color: Colors.white,
                   size: 24,
                 ),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Aktifkan 2FA?',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF212121),
+                    color: TemaAplikasi.textPrimary,
                   ),
                 ),
               ),
@@ -160,31 +163,28 @@ class _HalamanLoginState extends State<HalamanLogin> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Tambahkan lapisan keamanan ekstra untuk akun Anda dengan Two-Factor Authentication.',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   fontSize: 14,
-                  color: Color(0xFF424242),
+                  color: TemaAplikasi.textSecondary,
                 ),
               ),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE3F2FD),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Row(
+                decoration: TemaAplikasi.infoLightBox,
+                child: Row(
                   children: [
                     Icon(Icons.info_outline,
-                        color: Color(0xFF1565C0), size: 20),
-                    SizedBox(width: 8),
+                        color: TemaAplikasi.info, size: 20),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         'Gunakan Google Authenticator untuk kode verifikasi.',
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 12,
-                          color: Color(0xFF1565C0),
+                          color: TemaAplikasi.info,
                         ),
                       ),
                     ),
@@ -204,15 +204,15 @@ class _HalamanLoginState extends State<HalamanLogin> {
                           jgTanyaLagi = value ?? false;
                         });
                       },
-                      activeColor: const Color(0xFF00695C),
+                      activeColor: TemaAplikasi.primary,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     'Jangan tanya lagi',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       fontSize: 13,
-                      color: Color(0xFF424242),
+                      color: TemaAplikasi.textSecondary,
                     ),
                   ),
                 ],
@@ -232,9 +232,9 @@ class _HalamanLoginState extends State<HalamanLogin> {
                   MaterialPageRoute(builder: (_) => const HalamanUtama()),
                 );
               },
-              child: const Text(
+              child: Text(
                 'Nanti Saja',
-                style: TextStyle(color: Color(0xFF616161)),
+                style: GoogleFonts.poppins(color: TemaAplikasi.textTertiary),
               ),
             ),
             ElevatedButton(
@@ -255,15 +255,13 @@ class _HalamanLoginState extends State<HalamanLogin> {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF00695C),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
+              style: TemaAplikasi.primaryButton,
+              child: Text(
                 'Ya, Aktifkan',
-                style: TextStyle(color: Colors.white),
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],
@@ -280,12 +278,8 @@ class _HalamanLoginState extends State<HalamanLogin> {
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFF00695C), Color(0xFF004D40)],
-            ),
+          decoration: BoxDecoration(
+            gradient: TemaAplikasi.gradientPrimaryLinear,
           ),
           child: SafeArea(
             child: Padding(
@@ -293,15 +287,23 @@ class _HalamanLoginState extends State<HalamanLogin> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.account_balance,
-                    size: 80,
-                    color: Colors.white,
+                  // Logo dengan animasi
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.account_balance,
+                      size: 60,
+                      color: Colors.white,
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  const SizedBox(height: 24),
+                  Text(
                     'Selamat Datang',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -310,7 +312,7 @@ class _HalamanLoginState extends State<HalamanLogin> {
                   const SizedBox(height: 8),
                   Text(
                     'Masuk ke akun Anda',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       fontSize: 16,
                       color: Colors.white.withOpacity(0.9),
                     ),
@@ -320,12 +322,12 @@ class _HalamanLoginState extends State<HalamanLogin> {
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: const [
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
                         BoxShadow(
-                          color: Color(0x40000000),
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
                       ],
                     ),
@@ -336,28 +338,10 @@ class _HalamanLoginState extends State<HalamanLogin> {
                           TextFormField(
                             controller: _pengendaliEmail,
                             keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
+                            style: GoogleFonts.poppins(),
+                            decoration: TemaAplikasi.inputDecoration(
                               labelText: 'Email',
-                              labelStyle:
-                                  const TextStyle(color: Color(0xFF616161)),
-                              prefixIcon: const Icon(Icons.email,
-                                  color: Color(0xFF00695C)),
-                              filled: true,
-                              fillColor: const Color(0xFFF5F5F5),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide.none,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                    color: Color(0xFF00695C), width: 2),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide:
-                                    const BorderSide(color: Color(0xFFC62828)),
-                              ),
+                              prefixIcon: Icons.email_outlined,
                             ),
                             validator: (nilai) {
                               if (nilai == null || nilai.isEmpty) {
@@ -373,40 +357,23 @@ class _HalamanLoginState extends State<HalamanLogin> {
                           TextFormField(
                             controller: _pengendaliPassword,
                             obscureText: _sembunyiPassword,
-                            decoration: InputDecoration(
+                            style: GoogleFonts.poppins(),
+                            decoration: TemaAplikasi.inputDecoration(
                               labelText: 'Password',
-                              labelStyle:
-                                  const TextStyle(color: Color(0xFF616161)),
-                              prefixIcon: const Icon(Icons.lock,
-                                  color: Color(0xFF00695C)),
+                              prefixIcon: Icons.lock_outline,
+                            ).copyWith(
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _sembunyiPassword
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: const Color(0xFF757575),
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: TemaAplikasi.textTertiary,
                                 ),
                                 onPressed: () {
                                   setState(() {
                                     _sembunyiPassword = !_sembunyiPassword;
                                   });
                                 },
-                              ),
-                              filled: true,
-                              fillColor: const Color(0xFFF5F5F5),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide.none,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                    color: Color(0xFF00695C), width: 2),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide:
-                                    const BorderSide(color: Color(0xFFC62828)),
                               ),
                             ),
                             validator: (nilai) {
@@ -424,16 +391,7 @@ class _HalamanLoginState extends State<HalamanLogin> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: _sedangMemuat ? null : _prosesLogin,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF00695C),
-                                disabledBackgroundColor:
-                                    const Color(0xFFBDBDBD),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
+                              style: TemaAplikasi.primaryButton,
                               child: _sedangMemuat
                                   ? const SizedBox(
                                       width: 20,
@@ -443,9 +401,9 @@ class _HalamanLoginState extends State<HalamanLogin> {
                                         strokeWidth: 2,
                                       ),
                                     )
-                                  : const Text(
+                                  : Text(
                                       'Masuk',
-                                      style: TextStyle(
+                                      style: GoogleFonts.poppins(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white,
@@ -457,9 +415,11 @@ class _HalamanLoginState extends State<HalamanLogin> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
+                              Text(
                                 'Belum punya akun? ',
-                                style: TextStyle(color: Color(0xFF616161)),
+                                style: GoogleFonts.poppins(
+                                  color: TemaAplikasi.textSecondary,
+                                ),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -471,11 +431,11 @@ class _HalamanLoginState extends State<HalamanLogin> {
                                     ),
                                   );
                                 },
-                                child: const Text(
+                                child: Text(
                                   'Daftar Sekarang',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF00695C),
+                                    color: TemaAplikasi.primary,
                                   ),
                                 ),
                               ),

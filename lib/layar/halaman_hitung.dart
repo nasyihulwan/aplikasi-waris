@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
+import '../tema/tema_aplikasi.dart';
+import '../widget/komponen_umum.dart';
 
 class HalamanHitung extends StatefulWidget {
   const HalamanHitung({super.key});
@@ -18,6 +21,7 @@ class _HalamanHitungState extends State<HalamanHitung> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: TemaAplikasi.background,
       body: _hasilPerhitungan == null
           ? _buatTampilanAwal()
           : _buatTampilanHasil(),
@@ -31,59 +35,99 @@ class _HalamanHitungState extends State<HalamanHitung> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.calculate_outlined,
-              size: 120,
-              color: Color(0xFF00796B),
+            Container(
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    TemaAplikasi.primary.withOpacity(0.1),
+                    TemaAplikasi.primary.withOpacity(0.05),
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.calculate_outlined,
+                size: 80,
+                color: TemaAplikasi.primary,
+              ),
             ),
-            const SizedBox(height: 24),
-            const Text(
+            const SizedBox(height: 32),
+            Text(
               'Hitung Pembagian Warisan',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF004D40),
+                color: TemaAplikasi.primaryDark,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            Text(
-              'Sistem akan menghitung pembagian warisan berdasarkan hukum Islam (Faraid) dengan data ahli waris dan aset yang telah disetujui.',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                'Sistem akan menghitung pembagian warisan berdasarkan hukum Islam (Faraid) dengan data ahli waris dan aset yang telah disetujui.',
+                style: TemaAplikasi.bodyMedium.copyWith(
+                  color: TemaAplikasi.textSecondary,
+                  height: 1.6,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
             _sedangMenghitung
-                ? const CircularProgressIndicator()
-                : ElevatedButton.icon(
-                    onPressed: _hitungPembagian,
-                    icon: const Icon(Icons.calculate, size: 24),
-                    label: const Text(
-                      'Mulai Perhitungan',
-                      style: TextStyle(fontSize: 16),
+                ? const LoadingIndicator(message: 'Menghitung pembagian...')
+                : Container(
+                    decoration: BoxDecoration(
+                      gradient: TemaAplikasi.gradientPrimaryLinear,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: TemaAplikasi.primary.withOpacity(0.4),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00796B),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 16,
+                    child: ElevatedButton.icon(
+                      onPressed: _hitungPembagian,
+                      icon: const Icon(Icons.calculate,
+                          size: 24, color: Colors.white),
+                      label: Text(
+                        'Mulai Perhitungan',
+                        style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
                       ),
                     ),
                   ),
-            const SizedBox(height: 16),
-            const Text(
-              'Pastikan data ahli waris dan aset sudah lengkap',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-                fontStyle: FontStyle.italic,
+            const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: TemaAplikasi.infoLight,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.info_outline, size: 18, color: TemaAplikasi.info),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Pastikan data ahli waris dan aset sudah lengkap',
+                    style: TemaAplikasi.bodySmall
+                        .copyWith(color: TemaAplikasi.info),
+                  ),
+                ],
               ),
             ),
           ],
@@ -106,12 +150,12 @@ class _HalamanHitungState extends State<HalamanHitung> {
         children: [
           _buatKartuRingkasan(totalHarta),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'Rincian Pembagian',
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF004D40),
+              color: TemaAplikasi.primaryDark,
             ),
           ),
           const SizedBox(height: 16),
@@ -123,32 +167,59 @@ class _HalamanHitungState extends State<HalamanHitung> {
           Row(
             children: [
               Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: _hitungUlang,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Hitung Ulang'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[700],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: TemaAplikasi.divider),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: _hitungUlang,
+                    icon:
+                        Icon(Icons.refresh, color: TemaAplikasi.textSecondary),
+                    label: Text('Hitung Ulang',
+                        style: TextStyle(color: TemaAplikasi.textPrimary)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shadowColor: Colors.transparent,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: _simpanHasil,
-                  icon: const Icon(Icons.save),
-                  label: const Text('Simpan Hasil'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00796B),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: TemaAplikasi.gradientPrimaryLinear,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: TemaAplikasi.primary.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: _simpanHasil,
+                    icon: const Icon(Icons.save, color: Colors.white),
+                    label: const Text('Simpan Hasil',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
                   ),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -157,42 +228,43 @@ class _HalamanHitungState extends State<HalamanHitung> {
   Widget _buatKartuRingkasan(double totalHarta) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF004D40), Color(0xFF00796B)],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.teal.withOpacity(0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+      decoration: TemaAplikasi.kartuGradient,
       child: Column(
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.account_balance_wallet, color: Colors.white, size: 32),
-              SizedBox(width: 12),
-              Text(
-                'Total Harta Warisan',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(Icons.account_balance_wallet,
+                    color: Colors.white, size: 28),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Total Harta Warisan',
+                      style: GoogleFonts.poppins(
+                          color: Colors.white70, fontSize: 14),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _formatRupiah(totalHarta),
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            _formatRupiah(totalHarta),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ],
       ),
@@ -205,12 +277,9 @@ class _HalamanHitungState extends State<HalamanHitung> {
     final double bagian = double.tryParse(item['bagian'].toString()) ?? 0.0;
     final String keterangan = item['keterangan']?.toString() ?? '';
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: TemaAplikasi.kartuDekorasi,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -218,11 +287,21 @@ class _HalamanHitungState extends State<HalamanHitung> {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: const Color(0xFF00796B).withOpacity(0.1),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        TemaAplikasi.primary.withOpacity(0.15),
+                        TemaAplikasi.primary.withOpacity(0.05),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: Icon(
                     _dapatkanIconHubungan(hubungan),
-                    color: const Color(0xFF00796B),
+                    color: TemaAplikasi.primary,
+                    size: 22,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -230,41 +309,32 @@ class _HalamanHitungState extends State<HalamanHitung> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        nama,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
+                      Text(nama, style: TemaAplikasi.titleMedium),
                       const SizedBox(height: 4),
                       Text(
                         _dapatkanLabelHubungan(hubungan),
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
+                        style: TemaAplikasi.bodySmall
+                            .copyWith(color: TemaAplikasi.textSecondary),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            const Divider(height: 24),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Divider(height: 1),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Bagian:  ',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
-                ),
+                Text('Bagian:',
+                    style: TemaAplikasi.bodyMedium
+                        .copyWith(color: TemaAplikasi.textSecondary)),
                 Text(
                   _formatRupiah(bagian),
-                  style: const TextStyle(
-                    color: Color(0xFF00796B),
+                  style: GoogleFonts.poppins(
+                    color: TemaAplikasi.primary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -276,21 +346,19 @@ class _HalamanHitungState extends State<HalamanHitung> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  color: TemaAplikasi.infoLight,
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline,
-                        size: 16, color: Colors.blue),
+                    Icon(Icons.info_outline,
+                        size: 16, color: TemaAplikasi.info),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         keterangan,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.blue[900],
-                        ),
+                        style: TemaAplikasi.bodySmall
+                            .copyWith(color: TemaAplikasi.info),
                       ),
                     ),
                   ],
@@ -372,9 +440,12 @@ class _HalamanHitungState extends State<HalamanHitung> {
       if (ahliWaris.isEmpty) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Belum ada data ahli waris'),
-              backgroundColor: Colors.red,
+            SnackBar(
+              content: const Text('Belum ada data ahli waris'),
+              backgroundColor: TemaAplikasi.error,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
           );
         }
@@ -393,9 +464,12 @@ class _HalamanHitungState extends State<HalamanHitung> {
       if (totalHarta <= 0) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Belum ada aset yang disetujui'),
-              backgroundColor: Colors.red,
+            SnackBar(
+              content: const Text('Belum ada aset yang disetujui'),
+              backgroundColor: TemaAplikasi.error,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
           );
         }
@@ -416,7 +490,10 @@ class _HalamanHitungState extends State<HalamanHitung> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Terjadi kesalahan:  ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: TemaAplikasi.error,
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
       }
@@ -580,9 +657,12 @@ class _HalamanHitungState extends State<HalamanHitung> {
       // TODO: Implement simpanRiwayat method in PenyediaWarisan
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Hasil perhitungan berhasil disimpan'),
-            backgroundColor: Colors.green,
+          SnackBar(
+            content: const Text('Hasil perhitungan berhasil disimpan'),
+            backgroundColor: TemaAplikasi.success,
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
       }
@@ -592,7 +672,10 @@ class _HalamanHitungState extends State<HalamanHitung> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Terjadi kesalahan: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: TemaAplikasi.error,
+            behavior: SnackBarBehavior.floating,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
       }

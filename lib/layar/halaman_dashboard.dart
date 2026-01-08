@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
+import '../tema/tema_aplikasi.dart';
+import '../widget/komponen_umum.dart';
+import 'halaman_pengaturan.dart';
 
 class HalamanDashboard extends StatefulWidget {
   const HalamanDashboard({super.key});
@@ -31,269 +35,257 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
     final penyediaAuth = Provider.of<PenyediaAuth>(context);
     final penyediaWarisan = Provider.of<PenyediaWarisan>(context);
 
-    return SingleChildScrollView(
-      child: Container(
+    return Scaffold(
+      backgroundColor: TemaAplikasi.background,
+      body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
-            end: Alignment.center,
-            colors: [Color(0xFF00796B), Color(0xFFF5F5F5)],
-            stops: [0.0, 0.3],
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF00695C),
+              Color(0xFF00897B),
+            ],
+            stops: [0.0, 0.35],
           ),
         ),
-        child: Column(
-          children: [
-            // Header dengan sambutan
-            Container(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Assalamu\'alaikum,',
-                    style: TextStyle(fontSize: 16, color: Colors.white70),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    penyediaAuth.namaPengguna ?? 'Pengguna',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+        child: SafeArea(
+          bottom: false,
+          child: CustomScrollView(
+            slivers: [
+              // Header dengan sambutan
+              SliverToBoxAdapter(
+                child: _buatHeader(penyediaAuth),
+              ),
+
+              // Konten utama
+              SliverToBoxAdapter(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFAFAFA),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32),
+                      topRight: Radius.circular(32),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '✨ Kelola warisan dengan adil dan transparan',
-                    style: TextStyle(fontSize: 14, color: Colors.white70),
-                  ),
-                ],
-              ),
-            ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Data Pewaris Card
+                        _buatKartuDataPewaris(penyediaAuth),
 
-            // Konten utama
-            Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Color(0xFFF5F5F5),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
+                        const SizedBox(height: 8),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 16),
+                          child: Text(
+                            'Menu Utama',
+                            style: TemaAplikasi.headingSmall,
+                          ),
+                        ),
+
+                        // Menu Grid
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.95,
+                            children: [
+                              KartuMenu(
+                                judul: 'Ahli Waris',
+                                subjudul:
+                                    '${penyediaWarisan.daftarAhliWaris.length} Orang',
+                                icon: Icons.people_outline,
+                                warna: TemaAplikasi.menuBlue,
+                              ),
+                              KartuMenu(
+                                judul: 'Aset Harta',
+                                subjudul:
+                                    '${penyediaWarisan.daftarAset.length} Aset',
+                                icon: Icons.account_balance_wallet_outlined,
+                                warna: TemaAplikasi.menuOrange,
+                              ),
+                              KartuMenu(
+                                judul: 'Perhitungan',
+                                subjudul: 'Hitung Waris',
+                                icon: Icons.calculate_outlined,
+                                warna: TemaAplikasi.menuGreen,
+                              ),
+                              KartuMenu(
+                                judul: 'Riwayat',
+                                subjudul: 'Lihat Riwayat',
+                                icon: Icons.history,
+                                warna: TemaAplikasi.menuPurple,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Statistik
+                        _buatKartuStatistik(penyediaWarisan),
+
+                        const SizedBox(height: 8),
+
+                        // Tips & Info
+                        const KartuTips(
+                          judul: 'Tips Pembagian Warisan',
+                          deskripsi:
+                              'Pastikan semua ahli waris dan aset telah terdaftar sebelum melakukan perhitungan.',
+                        ),
+
+                        const SizedBox(height: 32),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(24),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buatHeader(PenyediaAuth penyediaAuth) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Data Pewaris Card
-                    _buatKartuDataPewaris(penyediaAuth),
-
-                    const SizedBox(height: 24),
-
-                    const Text(
-                      'Menu Utama',
-                      style: TextStyle(
-                        fontSize: 18,
+                    Text(
+                      'Assalamu\'alaikum,',
+                      style: TemaAplikasi.bodyWhiteLight,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      penyediaAuth.namaPengguna ?? 'Pengguna',
+                      style: GoogleFonts.poppins(
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 16),
-
-                    // Menu Grid
-                    GridView.count(
-                      crossAxisCount: 2,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      children: [
-                        _buatKartuMenu(
-                          context,
-                          'Ahli Waris',
-                          Icons.people,
-                          Colors.blue,
-                          '${penyediaWarisan.daftarAhliWaris.length} Orang',
-                          0,
-                        ),
-                        _buatKartuMenu(
-                          context,
-                          'Aset Harta',
-                          Icons.account_balance_wallet,
-                          Colors.orange,
-                          '${penyediaWarisan.daftarAset.length} Aset',
-                          1,
-                        ),
-                        _buatKartuMenu(
-                          context,
-                          'Perhitungan',
-                          Icons.calculate,
-                          Colors.green,
-                          'Hitung Waris',
-                          2,
-                        ),
-                        _buatKartuMenu(
-                          context,
-                          'Riwayat',
-                          Icons.history,
-                          Colors.purple,
-                          '0 Riwayat',
-                          3,
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Statistik
-                    _buatKartuStatistik(penyediaWarisan),
-
-                    const SizedBox(height: 24),
-
-                    // Tips & Info
-                    _buatKartuInfo(),
                   ],
                 ),
               ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HalamanPengaturan(),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.settings_outlined,
+                    color: Colors.white,
+                    size: 26,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(20),
             ),
-          ],
-        ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.auto_awesome,
+                  color: Colors.amber.shade300,
+                  size: 18,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Kelola warisan dengan adil dan transparan',
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buatKartuDataPewaris(PenyediaAuth penyediaAuth) {
     return Container(
+      margin: const EdgeInsets.fromLTRB(20, 20, 20, 8),
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF004D40), Color(0xFF00796B)],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.teal.withOpacity(0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+      decoration: TemaAplikasi.gradientCardDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.person_outline, color: Colors.white, size: 28),
-              SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.person_outline,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
               Text(
                 'Data Pewaris',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: TemaAplikasi.titleWhite,
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          _buatBarisPewaris('Nama', penyediaAuth.namaPewaris ?? '-'),
-          const SizedBox(height: 8),
-          _buatBarisPewaris(
-            'Tempat, Tanggal Lahir',
-            '${penyediaAuth.tempatLahirPewaris ?? '-'}, ${penyediaAuth.tahunLahirPewaris ?? '-'}',
+          const SizedBox(height: 20),
+          BarisInfo(
+            label: 'Nama',
+            nilai: penyediaAuth.namaPewaris ?? '-',
+            isWhite: true,
           ),
           const SizedBox(height: 8),
-          _buatBarisPewaris('NIK', penyediaAuth.nikPewaris ?? '-'),
+          BarisInfo(
+            label: 'TTL',
+            nilai:
+                '${penyediaAuth.tempatLahirPewaris ?? '-'}, ${penyediaAuth.tahunLahirPewaris ?? '-'}',
+            isWhite: true,
+          ),
+          BarisInfo(
+            label: 'NIK',
+            nilai: penyediaAuth.nikPewaris ?? '-',
+            isWhite: true,
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buatBarisPewaris(String label, String nilai) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 120,
-          child: Text(
-            label,
-            style: const TextStyle(color: Colors.white70, fontSize: 14),
-          ),
-        ),
-        const Text(': ', style: TextStyle(color: Colors.white70)),
-        Expanded(
-          child: Text(
-            nilai,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buatKartuMenu(
-    BuildContext context,
-    String judul,
-    IconData ikon,
-    Color warna,
-    String subjudul,
-    int indeks,
-  ) {
-    return InkWell(
-      onTap: () {
-        // Pindah ke halaman yang sesuai
-        final scaffold = context.findAncestorStateOfType<State>();
-        if (scaffold != null && scaffold.mounted) {
-          // Logic untuk navigasi
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: warna.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(ikon, size: 32, color: warna),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              judul,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              subjudul,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -309,115 +301,54 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
     );
 
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2)),
-        ],
-      ),
+      decoration: TemaAplikasi.cardDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Ringkasan',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buatItemStatistik(
-                'Total Ahli Waris',
-                '${penyediaWarisan.daftarAhliWaris.length}',
-                Icons.people,
-                Colors.blue,
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: TemaAplikasi.primarySurface,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  Icons.analytics_outlined,
+                  size: 22,
+                  color: TemaAplikasi.primary,
+                ),
               ),
-              _buatItemStatistik(
-                'Total Aset',
-                'Rp ${_formatAngka(totalNilaiAset)}',
-                Icons.account_balance_wallet,
-                Colors.green,
+              const SizedBox(width: 12),
+              Text(
+                'Ringkasan',
+                style: TemaAplikasi.titleLarge,
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buatItemStatistik(
-    String label,
-    String nilai,
-    IconData ikon,
-    Color warna,
-  ) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: warna.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: [
-            Icon(ikon, color: warna, size: 24),
-            const SizedBox(height: 8),
-            Text(
-              nilai,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: warna,
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: KartuStatistik(
+                  label: 'Total Ahli Waris',
+                  nilai: '${penyediaWarisan.daftarAhliWaris.length}',
+                  icon: Icons.people_outline,
+                  warna: TemaAplikasi.menuBlue,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buatKartuInfo() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.amber.shade50,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.amber.shade200),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.lightbulb_outline, color: Colors.amber.shade700, size: 28),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Tips Pembagian Warisan',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber.shade900,
-                  ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: KartuStatistik(
+                  label: 'Total Aset',
+                  nilai: 'Rp ${_formatAngka(totalNilaiAset)}',
+                  icon: Icons.account_balance_wallet_outlined,
+                  warna: TemaAplikasi.menuGreen,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Pastikan semua ahli waris dan aset telah terdaftar sebelum melakukan perhitungan.',
-                  style: TextStyle(fontSize: 12, color: Colors.amber.shade800),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

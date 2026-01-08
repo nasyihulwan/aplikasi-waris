@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../penyedia/penyedia_auth.dart';
 import '../layanan/layanan_2fa.dart';
+import '../tema/tema_aplikasi.dart';
 import 'halaman_setup_2fa.dart';
 import 'halaman_login.dart';
+import 'halaman_edit_profil.dart';
+import 'halaman_reset_password.dart';
 
 /// Halaman Pengaturan
 /// Menampilkan pengaturan akun termasuk manajemen 2FA
@@ -51,12 +55,12 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFFE0F2F1),
+                color: const Color(0xFFE8F5E9),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
                 Icons.security,
-                color: Color(0xFF00695C),
+                color: Color(0xFF1B5E20),
                 size: 24,
               ),
             ),
@@ -133,7 +137,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
               });
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF00695C),
+              backgroundColor: const Color(0xFF1B5E20),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -224,6 +228,34 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 12),
+                // Peringatan tentang reset password
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFEBEE),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFC62828)),
+                  ),
+                  child: const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.lock_outline,
+                          color: Color(0xFFC62828), size: 20),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Ketika Anda disable 2FA, Anda tidak akan pernah bisa mengganti password. Fitur ganti password memerlukan verifikasi 2FA.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFFC62828),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 20),
                 const Text(
                   'Untuk konfirmasi, ketik teks berikut:',
@@ -271,7 +303,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide:
-                          const BorderSide(color: Color(0xFF00695C), width: 2),
+                          const BorderSide(color: Color(0xFF1B5E20), width: 2),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -304,7 +336,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     hintStyle: const TextStyle(color: Color(0xFF9E9E9E)),
                     errorText: codeError,
                     prefixIcon: const Icon(Icons.lock_outline,
-                        color: Color(0xFF00695C)),
+                        color: Color(0xFF1B5E20)),
                     filled: true,
                     fillColor: const Color(0xFFF5F5F5),
                     counterText: '',
@@ -318,7 +350,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide:
-                          const BorderSide(color: Color(0xFF00695C), width: 2),
+                          const BorderSide(color: Color(0xFF1B5E20), width: 2),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -477,7 +509,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
           ],
         ),
         backgroundColor:
-            isSuccess ? const Color(0xFF2E7D32) : const Color(0xFF00695C),
+            isSuccess ? const Color(0xFF2E7D32) : const Color(0xFF1B5E20),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -551,73 +583,97 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
     final penyediaAuth = Provider.of<PenyediaAuth>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pengaturan'),
-        backgroundColor: const Color(0xFF00695C),
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
+      backgroundColor: TemaAplikasi.background,
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFF00695C),
-              ),
+          ? Center(
+              child: CircularProgressIndicator(color: TemaAplikasi.primary),
             )
           : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // User info header
+                  // User info header with gradient
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(24),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF00695C),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(24),
-                        bottomRight: Radius.circular(24),
+                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+                    decoration: BoxDecoration(
+                      gradient: TemaAplikasi.gradientPrimaryLinear,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(32),
+                        bottomRight: Radius.circular(32),
                       ),
                     ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.person,
-                            size: 36,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    child: SafeArea(
+                      bottom: false,
+                      child: Column(
+                        children: [
+                          // Back button row
+                          if (Navigator.canPop(context))
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_new,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (Navigator.canPop(context))
+                            const SizedBox(height: 16),
+                          Row(
                             children: [
-                              Text(
-                                penyediaAuth.namaPengguna ?? 'Pengguna',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                              Container(
+                                width: 72,
+                                height: 72,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Colors.white30, width: 2),
+                                ),
+                                child: const Icon(
+                                  Icons.person,
+                                  size: 40,
                                   color: Colors.white,
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                penyediaAuth.email ?? '-',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white.withOpacity(0.9),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      penyediaAuth.namaPengguna ?? 'Pengguna',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      penyediaAuth.email ?? '-',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        color: Colors.white.withOpacity(0.9),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
 
@@ -625,67 +681,57 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
 
                   // Keamanan Section
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Keamanan',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF424242),
+                            color: TemaAplikasi.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 12),
 
                         // 2FA Setting Card
                         Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 8,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
+                          decoration: TemaAplikasi.kartuDekorasi,
                           child: Column(
                             children: [
                               ListTile(
                                 leading: Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     color: _is2FAEnabled
-                                        ? const Color(0xFFE8F5E9)
-                                        : const Color(0xFFFFF3E0),
-                                    borderRadius: BorderRadius.circular(8),
+                                        ? TemaAplikasi.successLight
+                                        : TemaAplikasi.warningLight,
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Icon(
                                     Icons.security,
                                     color: _is2FAEnabled
-                                        ? const Color(0xFF2E7D32)
-                                        : const Color(0xFFE65100),
+                                        ? TemaAplikasi.success
+                                        : TemaAplikasi.warning,
                                   ),
                                 ),
-                                title: const Text(
+                                title: Text(
                                   'Two-Factor Authentication',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w600,
-                                    color: Color(0xFF212121),
+                                    color: TemaAplikasi.textPrimary,
                                   ),
                                 ),
                                 subtitle: Text(
                                   _is2FAEnabled
                                       ? 'Aktif - Akun Anda terlindungi'
                                       : 'Nonaktif - Aktifkan untuk keamanan ekstra',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontSize: 12,
                                     color: _is2FAEnabled
-                                        ? const Color(0xFF2E7D32)
-                                        : const Color(0xFFE65100),
+                                        ? TemaAplikasi.success
+                                        : TemaAplikasi.warning,
                                   ),
                                 ),
                                 trailing: Switch(
@@ -697,40 +743,41 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                                       _showDisable2FADialog();
                                     }
                                   },
-                                  activeColor: const Color(0xFF00695C),
-                                  activeTrackColor: const Color(0xFF80CBC4),
+                                  activeColor: TemaAplikasi.primary,
+                                  activeTrackColor: TemaAplikasi.primarySurface,
                                 ),
                               ),
                               if (_is2FAEnabled) ...[
                                 const Divider(height: 1),
                                 ListTile(
                                   leading: Container(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFE0F2F1),
-                                      borderRadius: BorderRadius.circular(8),
+                                      color: TemaAplikasi.primarySurface,
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.vpn_key,
-                                      color: Color(0xFF00695C),
+                                      color: TemaAplikasi.primary,
                                       size: 20,
                                     ),
                                   ),
-                                  title: const Text(
+                                  title: Text(
                                     'Backup Codes',
-                                    style: TextStyle(
+                                    style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w500,
-                                      color: Color(0xFF212121),
+                                      color: TemaAplikasi.textPrimary,
                                     ),
                                   ),
-                                  subtitle: const Text(
+                                  subtitle: Text(
                                     'Lihat atau generate backup codes baru',
-                                    style: TextStyle(
-                                        fontSize: 12, color: Color(0xFF616161)),
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: TemaAplikasi.textSecondary),
                                   ),
-                                  trailing: const Icon(
+                                  trailing: Icon(
                                     Icons.chevron_right,
-                                    color: Color(0xFF9E9E9E),
+                                    color: TemaAplikasi.textTertiary,
                                   ),
                                   onTap: () {
                                     print(
@@ -751,98 +798,107 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
 
                   // Akun Section
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Akun',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF424242),
+                            color: TemaAplikasi.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 12),
                         Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 8,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
+                          decoration: TemaAplikasi.kartuDekorasi,
                           child: Column(
                             children: [
                               ListTile(
                                 leading: Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFE3F2FD),
-                                    borderRadius: BorderRadius.circular(8),
+                                    color: TemaAplikasi.infoLight,
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.person_outline,
-                                    color: Color(0xFF1565C0),
+                                    color: TemaAplikasi.info,
                                   ),
                                 ),
-                                title: const Text(
+                                title: Text(
                                   'Profil',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFF212121),
+                                    color: TemaAplikasi.textPrimary,
                                   ),
                                 ),
-                                subtitle: const Text(
+                                subtitle: Text(
                                   'Ubah informasi profil',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Color(0xFF616161)),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      color: TemaAplikasi.textSecondary),
                                 ),
-                                trailing: const Icon(
+                                trailing: Icon(
                                   Icons.chevron_right,
-                                  color: Color(0xFF9E9E9E),
+                                  color: TemaAplikasi.textTertiary,
                                 ),
                                 onTap: () {
-                                  _showSnackBar(
-                                      'Fitur profil akan segera hadir');
+                                  print(
+                                      '⚙️ [PENGATURAN] Membuka halaman edit profil');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const HalamanEditProfil(),
+                                    ),
+                                  );
                                 },
                               ),
                               const Divider(height: 1),
                               ListTile(
                                 leading: Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFE8F5E9),
-                                    borderRadius: BorderRadius.circular(8),
+                                    color: TemaAplikasi.successLight,
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.lock_outline,
-                                    color: Color(0xFF2E7D32),
+                                    color: TemaAplikasi.success,
                                   ),
                                 ),
-                                title: const Text(
+                                title: Text(
                                   'Ubah Password',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFF212121),
+                                    color: TemaAplikasi.textPrimary,
                                   ),
                                 ),
-                                subtitle: const Text(
-                                  'Ganti password akun',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Color(0xFF616161)),
+                                subtitle: Text(
+                                  _is2FAEnabled
+                                      ? 'Ganti password akun'
+                                      : 'Aktifkan 2FA untuk mengganti password',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      color: _is2FAEnabled
+                                          ? TemaAplikasi.textSecondary
+                                          : TemaAplikasi.warning),
                                 ),
-                                trailing: const Icon(
+                                trailing: Icon(
                                   Icons.chevron_right,
-                                  color: Color(0xFF9E9E9E),
+                                  color: TemaAplikasi.textTertiary,
                                 ),
                                 onTap: () {
-                                  _showSnackBar(
-                                      'Fitur ubah password akan segera hadir');
+                                  print(
+                                      '⚙️ [PENGATURAN] Membuka halaman reset password');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const HalamanResetPassword(),
+                                    ),
+                                  );
                                 },
                               ),
                             ],
@@ -856,23 +912,22 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
 
                   // Logout Button
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: SizedBox(
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         onPressed: _showLogoutConfirmation,
-                        icon:
-                            const Icon(Icons.logout, color: Color(0xFFC62828)),
-                        label: const Text(
+                        icon: Icon(Icons.logout, color: TemaAplikasi.error),
+                        label: Text(
                           'Logout',
-                          style: TextStyle(
-                            color: Color(0xFFC62828),
+                          style: GoogleFonts.poppins(
+                            color: TemaAplikasi.error,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          side: const BorderSide(color: Color(0xFFC62828)),
+                          side: BorderSide(color: TemaAplikasi.error),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -887,9 +942,9 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                   Center(
                     child: Text(
                       'Aplikasi Warisan v1.0.0',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         fontSize: 12,
-                        color: Colors.grey.shade500,
+                        color: TemaAplikasi.textTertiary,
                       ),
                     ),
                   ),

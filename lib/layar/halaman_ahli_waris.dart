@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
+import '../tema/tema_aplikasi.dart';
+import '../widget/komponen_umum.dart';
 
 class HalamanAhliWaris extends StatefulWidget {
   const HalamanAhliWaris({super.key});
@@ -14,7 +17,6 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
   @override
   void initState() {
     super.initState();
-    // Delay untuk memastikan context sudah siap
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _muatData();
     });
@@ -41,14 +43,23 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
     final penyediaWarisan = Provider.of<PenyediaWarisan>(context);
 
     return Scaffold(
+      backgroundColor: TemaAplikasi.background,
       body: RefreshIndicator(
         onRefresh: _muatData,
+        color: TemaAplikasi.primary,
         child: penyediaWarisan.sedangMemuat
-            ? const Center(child: CircularProgressIndicator())
+            ? const LoadingIndicator(message: 'Memuat data ahli waris...')
             : penyediaWarisan.daftarAhliWaris.isEmpty
-                ? _buatTampilanKosong()
+                ? TampilanKosong(
+                    icon: Icons.people_outline,
+                    judul: 'Belum ada ahli waris',
+                    deskripsi: 'Klik tombol di bawah untuk menambah ahli waris',
+                    buttonText: 'Tambah Ahli Waris',
+                    onButtonPressed: () =>
+                        _tampilkanDialogTambahAhliWaris(context),
+                  )
                 : ListView.builder(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
                     itemCount: penyediaWarisan.daftarAhliWaris.length,
                     itemBuilder: (context, index) {
                       final ahliWaris = penyediaWarisan.daftarAhliWaris[index];
@@ -59,33 +70,13 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _tampilkanDialogTambahAhliWaris(context),
         icon: const Icon(Icons.add),
-        label: const Text('Tambah Ahli Waris'),
-        backgroundColor: const Color(0xFF00796B),
-      ),
-    );
-  }
-
-  Widget _buatTampilanKosong() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.people_outline,
-            size: 100,
-            color: Colors.grey,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'Belum ada ahli waris',
-            style: TextStyle(fontSize: 18, color: Colors.grey),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Klik tombol + untuk menambah',
-            style: TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-        ],
+        label: Text(
+          'Tambah',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
+        ),
+        backgroundColor: TemaAplikasi.primary,
+        foregroundColor: Colors.white,
+        elevation: 4,
       ),
     );
   }
@@ -96,77 +87,14 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
     final String jenisKelamin =
         ahliWaris['jenis_kelamin']?.toString() ?? 'laki-laki';
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(16),
-        leading: CircleAvatar(
-          backgroundColor: const Color(0xFF00796B).withOpacity(0.1),
-          radius: 28,
-          child: Icon(
-            _dapatkanIconHubungan(hubungan),
-            color: const Color(0xFF00796B),
-            size: 28,
-          ),
-        ),
-        title: Text(
-          nama,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 4),
-            Text(_dapatkanLabelHubungan(hubungan)),
-            const SizedBox(height: 2),
-            Text(
-              jenisKelamin == 'laki-laki' ? 'Laki-laki' : 'Perempuan',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
-        ),
-        trailing: PopupMenuButton<String>(
-          onSelected: (value) {
-            if (value == 'edit') {
-              _tampilkanDialogEditAhliWaris(context, ahliWaris);
-            } else if (value == 'hapus') {
-              _konfirmasiHapus(context, ahliWaris);
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 'edit',
-              child: Row(
-                children: [
-                  Icon(Icons.edit, size: 20),
-                  SizedBox(width: 8),
-                  Text('Edit'),
-                ],
-              ),
-            ),
-            const PopupMenuItem(
-              value: 'hapus',
-              child: Row(
-                children: [
-                  Icon(Icons.delete, size: 20, color: Colors.red),
-                  SizedBox(width: 8),
-                  Text('Hapus', style: TextStyle(color: Colors.red)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+    return KartuListItem(
+      judul: nama,
+      subjudul: _dapatkanLabelHubungan(hubungan),
+      info: jenisKelamin == 'laki-laki' ? 'Laki-laki' : 'Perempuan',
+      icon: _dapatkanIconHubungan(hubungan),
+      warna: _dapatkanWarnaHubungan(hubungan),
+      onEdit: () => _tampilkanDialogEditAhliWaris(context, ahliWaris),
+      onDelete: () => _konfirmasiHapus(context, ahliWaris),
     );
   }
 
@@ -186,6 +114,25 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
         return Icons.people;
       default:
         return Icons.person;
+    }
+  }
+
+  Color _dapatkanWarnaHubungan(String hubungan) {
+    switch (hubungan) {
+      case 'istri':
+      case 'suami':
+        return const Color(0xFFE91E63);
+      case 'anak_laki':
+      case 'anak_perempuan':
+        return TemaAplikasi.menuBlue;
+      case 'ayah':
+      case 'ibu':
+        return TemaAplikasi.menuOrange;
+      case 'saudara_laki':
+      case 'saudara_perempuan':
+        return TemaAplikasi.menuPurple;
+      default:
+        return TemaAplikasi.primary;
     }
   }
 
@@ -222,25 +169,45 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Tambah Ahli Waris'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: TemaAplikasi.primarySurface,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.person_add,
+                  color: TemaAplikasi.primary,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text('Tambah Ahli Waris', style: TemaAplikasi.titleLarge),
+            ],
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: pengendaliNama,
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Nama Lengkap',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.person_outline,
                   ),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Hubungan',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.family_restroom,
                   ),
-                  initialValue: hubunganTerpilih,
+                  value: hubunganTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'istri', child: Text('Istri')),
                     DropdownMenuItem(value: 'suami', child: Text('Suami')),
@@ -263,11 +230,11 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Jenis Kelamin',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.wc,
                   ),
-                  initialValue: jenisKelaminTerpilih,
+                  value: jenisKelaminTerpilih,
                   items: const [
                     DropdownMenuItem(
                         value: 'laki-laki', child: Text('Laki-laki')),
@@ -284,7 +251,8 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Batal'),
+              child: Text('Batal',
+                  style: TextStyle(color: TemaAplikasi.textSecondary)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -292,7 +260,13 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     hubunganTerpilih == null ||
                     jenisKelaminTerpilih == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Semua field harus diisi')),
+                    SnackBar(
+                      content: const Text('Semua field harus diisi'),
+                      backgroundColor: TemaAplikasi.error,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
                   );
                   return;
                 }
@@ -326,16 +300,20 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                             ? 'Ahli waris berhasil ditambahkan'
                             : 'Gagal menambahkan ahli waris',
                       ),
-                      backgroundColor: berhasil ? Colors.green : Colors.red,
+                      backgroundColor:
+                          berhasil ? TemaAplikasi.success : TemaAplikasi.error,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                   );
 
                   if (berhasil) {
-                    // Reload data
                     await _muatData();
                   }
                 }
               },
+              style: TemaAplikasi.primaryButton,
               child: const Text('Simpan'),
             ),
           ],
@@ -357,25 +335,45 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Edit Ahli Waris'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: TemaAplikasi.infoLight,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.edit,
+                  color: TemaAplikasi.info,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text('Edit Ahli Waris', style: TemaAplikasi.titleLarge),
+            ],
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: pengendaliNama,
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Nama Lengkap',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.person_outline,
                   ),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Hubungan',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.family_restroom,
                   ),
-                  initialValue: hubunganTerpilih,
+                  value: hubunganTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'istri', child: Text('Istri')),
                     DropdownMenuItem(value: 'suami', child: Text('Suami')),
@@ -398,11 +396,11 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Jenis Kelamin',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.wc,
                   ),
-                  initialValue: jenisKelaminTerpilih,
+                  value: jenisKelaminTerpilih,
                   items: const [
                     DropdownMenuItem(
                         value: 'laki-laki', child: Text('Laki-laki')),
@@ -419,7 +417,8 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Batal'),
+              child: Text('Batal',
+                  style: TextStyle(color: TemaAplikasi.textSecondary)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -427,7 +426,13 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     hubunganTerpilih == null ||
                     jenisKelaminTerpilih == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Semua field harus diisi')),
+                    SnackBar(
+                      content: const Text('Semua field harus diisi'),
+                      backgroundColor: TemaAplikasi.error,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
                   );
                   return;
                 }
@@ -455,16 +460,20 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                             ? 'Ahli waris berhasil diupdate'
                             : 'Gagal mengupdate ahli waris',
                       ),
-                      backgroundColor: berhasil ? Colors.green : Colors.red,
+                      backgroundColor:
+                          berhasil ? TemaAplikasi.success : TemaAplikasi.error,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                   );
 
                   if (berhasil) {
-                    // Live refresh setelah edit
                     await _muatData();
                   }
                 }
               },
+              style: TemaAplikasi.primaryButton,
               child: const Text('Simpan'),
             ),
           ],
@@ -478,14 +487,36 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Konfirmasi Hapus'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: TemaAplikasi.errorLight,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.delete_outline,
+                color: TemaAplikasi.error,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text('Konfirmasi Hapus', style: TemaAplikasi.titleLarge),
+          ],
+        ),
         content: Text(
           'Apakah Anda yakin ingin menghapus "${ahliWaris['nama_lengkap']}"?',
+          style: TemaAplikasi.bodyMedium,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
+            child: Text('Batal',
+                style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -509,17 +540,20 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                           ? 'Ahli waris berhasil dihapus'
                           : 'Gagal menghapus ahli waris',
                     ),
-                    backgroundColor: berhasil ? Colors.green : Colors.red,
+                    backgroundColor:
+                        berhasil ? TemaAplikasi.success : TemaAplikasi.error,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 );
 
                 if (berhasil) {
-                  // Live refresh setelah hapus
                   await _muatData();
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: TemaAplikasi.dangerButton,
             child: const Text('Hapus'),
           ),
         ],

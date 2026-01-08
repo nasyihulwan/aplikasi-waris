@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../penyedia/penyedia_auth.dart';
+import '../tema/tema_aplikasi.dart';
 import 'halaman_dashboard.dart';
 import 'halaman_ahli_waris.dart';
 import 'halaman_aset_harta.dart';
 import 'halaman_hitung.dart';
 import 'halaman_pengaturan.dart';
+import 'halaman_edit_profil.dart';
 import 'halaman_login.dart';
 
 /// Halaman Utama
@@ -47,35 +50,32 @@ class _HalamanUtamaState extends State<HalamanUtama> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
         ),
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFEBEE),
-                borderRadius: BorderRadius.circular(8),
+                color: TemaAplikasi.errorLight,
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.logout,
-                color: Color(0xFFC62828),
+                color: TemaAplikasi.error,
                 size: 24,
               ),
             ),
             const SizedBox(width: 12),
-            const Text(
+            Text(
               'Konfirmasi Logout',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF212121),
-              ),
+              style: TemaAplikasi.titleLarge,
             ),
           ],
         ),
-        content: const Text(
+        content: Text(
           'Apakah Anda yakin ingin keluar dari aplikasi?',
-          style: TextStyle(color: Color(0xFF424242)),
+          style: TemaAplikasi.bodyMedium,
         ),
         actions: [
           TextButton(
@@ -83,9 +83,9 @@ class _HalamanUtamaState extends State<HalamanUtama> {
               print('🏠 [UTAMA] Logout dibatalkan');
               Navigator.pop(context);
             },
-            child: const Text(
+            child: Text(
               'Batal',
-              style: TextStyle(color: Color(0xFF616161)),
+              style: TextStyle(color: TemaAplikasi.textSecondary),
             ),
           ),
           ElevatedButton(
@@ -104,16 +104,8 @@ class _HalamanUtamaState extends State<HalamanUtama> {
                 );
               }
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFC62828),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text(
-              'Logout',
-              style: TextStyle(color: Colors.white),
-            ),
+            style: TemaAplikasi.dangerButton,
+            child: const Text('Logout'),
           ),
         ],
       ),
@@ -125,208 +117,200 @@ class _HalamanUtamaState extends State<HalamanUtama> {
     print('🏠 [UTAMA] Build halaman utama, indeks: $_indeksTerpilih');
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _judulHalaman[_indeksTerpilih],
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: const Color(0xFF00695C),
-        foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              print('🏠 [UTAMA] Tombol notifikasi ditekan');
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Row(
-                    children: [
-                      Icon(Icons.info_outline, color: Colors.white),
-                      SizedBox(width: 8),
-                      Text('Fitur notifikasi akan segera hadir'),
-                    ],
-                  ),
-                  backgroundColor: const Color(0xFF00695C),
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+      appBar: _indeksTerpilih == 0
+          ? null
+          : AppBar(
+              title: Text(
+                _judulHalaman[_indeksTerpilih],
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
-              );
-            },
-          ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              ),
+              backgroundColor: TemaAplikasi.primary,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              actions: [
+                _buildPopupMenu(),
+              ],
             ),
-            color: Colors.white,
-            itemBuilder: (context) => <PopupMenuEntry<String>>[
-              PopupMenuItem<String>(
-                value: 'profil',
-                child: const ListTile(
-                  leading: Icon(Icons.person, color: Color(0xFF00695C)),
-                  title: Text(
-                    'Profil',
-                    style: TextStyle(color: Color(0xFF212121)),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-                onTap: () {
-                  print('🏠 [UTAMA] Menu Profil ditekan');
-                  Future.delayed(const Duration(milliseconds: 10), () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Row(
-                          children: [
-                            Icon(Icons.info_outline, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text('Fitur profil akan segera hadir'),
-                          ],
-                        ),
-                        backgroundColor: const Color(0xFF00695C),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    );
-                  });
-                },
-              ),
-              PopupMenuItem<String>(
-                value: 'pengaturan',
-                child: const ListTile(
-                  leading: Icon(Icons.settings, color: Color(0xFF00695C)),
-                  title: Text(
-                    'Pengaturan',
-                    style: TextStyle(color: Color(0xFF212121)),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-                onTap: () {
-                  print('🏠 [UTAMA] Menu Pengaturan ditekan');
-                  Future.delayed(const Duration(milliseconds: 10), () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const HalamanPengaturan(),
-                      ),
-                    );
-                  });
-                },
-              ),
-              PopupMenuItem<String>(
-                value: 'bantuan',
-                child: const ListTile(
-                  leading: Icon(Icons.help_outline, color: Color(0xFF00695C)),
-                  title: Text(
-                    'Bantuan',
-                    style: TextStyle(color: Color(0xFF212121)),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-                onTap: () {
-                  print('🏠 [UTAMA] Menu Bantuan ditekan');
-                  Future.delayed(const Duration(milliseconds: 10), () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Row(
-                          children: [
-                            Icon(Icons.info_outline, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text('Fitur bantuan akan segera hadir'),
-                          ],
-                        ),
-                        backgroundColor: const Color(0xFF00695C),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    );
-                  });
-                },
-              ),
-              const PopupMenuDivider(),
-              PopupMenuItem<String>(
-                value: 'keluar',
-                child: const ListTile(
-                  leading: Icon(Icons.logout, color: Color(0xFFC62828)),
-                  title: Text(
-                    'Keluar',
-                    style: TextStyle(color: Color(0xFFC62828)),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-                onTap: () {
-                  print('🏠 [UTAMA] Menu Keluar ditekan');
-                  Future.delayed(const Duration(milliseconds: 10), () {
-                    _showLogoutConfirmation();
-                  });
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
       body: _halaman[_indeksTerpilih],
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Color(0x1A000000),
-              blurRadius: 10,
-              offset: Offset(0, -2),
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 16,
+              offset: const Offset(0, -4),
             ),
           ],
         ),
-        child: BottomNavigationBar(
-          currentIndex: _indeksTerpilih,
-          onTap: (indeks) {
-            print('🏠 [UTAMA] Tab ditekan: $indeks (${_judulHalaman[indeks]})');
-            setState(() => _indeksTerpilih = indeks);
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: const Color(0xFF00695C),
-          unselectedItemColor: const Color(0xFF757575),
-          selectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(
+                    0, Icons.dashboard_outlined, Icons.dashboard, 'Dashboard'),
+                _buildNavItem(
+                    1, Icons.people_outline, Icons.people, 'Ahli Waris'),
+                _buildNavItem(2, Icons.account_balance_wallet_outlined,
+                    Icons.account_balance_wallet, 'Aset'),
+                _buildNavItem(
+                    3, Icons.calculate_outlined, Icons.calculate, 'Hitung'),
+              ],
+            ),
           ),
-          unselectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.normal,
-            fontSize: 12,
-          ),
-          showUnselectedLabels: true,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard_outlined),
-              activeIcon: Icon(Icons.dashboard),
-              label: 'Dashboard',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(
+      int index, IconData icon, IconData activeIcon, String label) {
+    final isSelected = _indeksTerpilih == index;
+    return InkWell(
+      onTap: () {
+        print('🏠 [UTAMA] Tab ditekan: $index (${_judulHalaman[index]})');
+        setState(() => _indeksTerpilih = index);
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(
+          horizontal: isSelected ? 20 : 16,
+          vertical: 10,
+        ),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? TemaAplikasi.primary.withOpacity(0.1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              isSelected ? activeIcon : icon,
+              color: isSelected
+                  ? TemaAplikasi.primary
+                  : TemaAplikasi.textSecondary,
+              size: 24,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people_outline),
-              activeIcon: Icon(Icons.people),
-              label: 'Ahli Waris',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet_outlined),
-              activeIcon: Icon(Icons.account_balance_wallet),
-              label: 'Aset Harta',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calculate_outlined),
-              activeIcon: Icon(Icons.calculate),
-              label: 'Hitung',
-            ),
+            if (isSelected) ...[
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: GoogleFonts.poppins(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: TemaAplikasi.primary,
+                ),
+              ),
+            ],
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPopupMenu() {
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.more_vert),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      color: Colors.white,
+      elevation: 8,
+      offset: const Offset(0, 50),
+      itemBuilder: (context) => <PopupMenuEntry<String>>[
+        _buildPopupMenuItem(
+          value: 'profil',
+          icon: Icons.person_outline,
+          text: 'Edit Profil',
+          color: TemaAplikasi.primary,
+        ),
+        _buildPopupMenuItem(
+          value: 'pengaturan',
+          icon: Icons.settings_outlined,
+          text: 'Pengaturan',
+          color: TemaAplikasi.primary,
+        ),
+        _buildPopupMenuItem(
+          value: 'bantuan',
+          icon: Icons.help_outline,
+          text: 'Bantuan',
+          color: TemaAplikasi.info,
+        ),
+        const PopupMenuDivider(),
+        _buildPopupMenuItem(
+          value: 'keluar',
+          icon: Icons.logout,
+          text: 'Keluar',
+          color: TemaAplikasi.error,
+        ),
+      ],
+      onSelected: (value) {
+        switch (value) {
+          case 'profil':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const HalamanEditProfil()),
+            );
+            break;
+          case 'pengaturan':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const HalamanPengaturan()),
+            );
+            break;
+          case 'bantuan':
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.info_outline, color: Colors.white),
+                    const SizedBox(width: 8),
+                    const Text('Fitur bantuan akan segera hadir'),
+                  ],
+                ),
+                backgroundColor: TemaAplikasi.info,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            );
+            break;
+          case 'keluar':
+            _showLogoutConfirmation();
+            break;
+        }
+      },
+    );
+  }
+
+  PopupMenuItem<String> _buildPopupMenuItem({
+    required String value,
+    required IconData icon,
+    required String text,
+    required Color color,
+  }) {
+    return PopupMenuItem<String>(
+      value: value,
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 22),
+          const SizedBox(width: 12),
+          Text(
+            text,
+            style: GoogleFonts.poppins(
+              color: value == 'keluar' ? color : TemaAplikasi.textPrimary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }

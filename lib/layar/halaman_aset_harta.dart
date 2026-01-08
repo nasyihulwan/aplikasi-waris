@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../penyedia/penyedia_auth.dart';
 import '../penyedia/penyedia_warisan.dart';
+import '../tema/tema_aplikasi.dart';
+import '../widget/komponen_umum.dart';
 
 class HalamanAsetHarta extends StatefulWidget {
   const HalamanAsetHarta({super.key});
@@ -34,18 +37,26 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     final penyediaWarisan = Provider.of<PenyediaWarisan>(context);
 
     return Scaffold(
+      backgroundColor: TemaAplikasi.background,
       body: RefreshIndicator(
         onRefresh: _muatData,
+        color: TemaAplikasi.primary,
         child: penyediaWarisan.sedangMemuat
-            ? const Center(child: CircularProgressIndicator())
+            ? const LoadingIndicator(message: 'Memuat aset harta...')
             : penyediaWarisan.daftarAset.isEmpty
-                ? _buatTampilanKosong()
+                ? TampilanKosong(
+                    icon: Icons.account_balance_wallet_outlined,
+                    judul: 'Belum Ada Aset Harta',
+                    deskripsi: 'Klik tombol + untuk menambah aset',
+                    buttonText: 'Tambah Aset',
+                    onButtonPressed: () => _tampilkanDialogTambahAset(context),
+                  )
                 : Column(
                     children: [
                       _buatRingkasanAset(penyediaWarisan.daftarAset),
                       Expanded(
                         child: ListView.builder(
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemCount: penyediaWarisan.daftarAset.length,
                           itemBuilder: (context, index) {
                             final aset = penyediaWarisan.daftarAset[index];
@@ -56,44 +67,33 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                     ],
                   ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _tampilkanDialogTambahAset(context),
-        icon: const Icon(Icons.add),
-        label: const Text('Tambah Aset'),
-        backgroundColor: const Color(0xFF00796B),
-      ),
-    );
-  }
-
-  Widget _buatTampilanKosong() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.account_balance_wallet_outlined,
-            size: 100,
-            color: Colors.grey,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'Belum ada aset harta',
-            style: TextStyle(fontSize: 18, color: Colors.grey),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Klik tombol + untuk menambah',
-            style: TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-        ],
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          gradient: TemaAplikasi.gradientPrimaryLinear,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: TemaAplikasi.primary.withOpacity(0.4),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: FloatingActionButton.extended(
+          onPressed: () => _tampilkanDialogTambahAset(context),
+          icon: const Icon(Icons.add, color: Colors.white),
+          label: Text('Tambah Aset',
+              style: GoogleFonts.poppins(
+                  color: Colors.white, fontWeight: FontWeight.w600)),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
       ),
     );
   }
 
   Widget _buatRingkasanAset(List<Map<String, dynamic>> daftarAset) {
     double totalDisetujui = 0;
-    // ignore: unused_local_variable
-    double totalMenunggu = 0;
     int jumlahDisetujui = 0;
     int jumlahMenunggu = 0;
     int jumlahDitolak = 0;
@@ -106,7 +106,6 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
         totalDisetujui += nilai;
         jumlahDisetujui++;
       } else if (status == 'menunggu') {
-        totalMenunggu += nilai;
         jumlahMenunggu++;
       } else if (status == 'ditolak') {
         jumlahDitolak++;
@@ -116,56 +115,64 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF004D40), Color(0xFF00796B)],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.teal.withOpacity(0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+      decoration: TemaAplikasi.kartuGradient,
       child: Column(
         children: [
-          const Text(
-            'Total Nilai Aset Disetujui',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            _formatRupiah(totalDisetujui),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Divider(color: Colors.white30),
-          const SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buatItemStatistik(
-                'Disetujui',
-                jumlahDisetujui.toString(),
-                Colors.green,
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(Icons.account_balance_wallet,
+                    color: Colors.white, size: 28),
               ),
-              _buatItemStatistik(
-                'Menunggu',
-                jumlahMenunggu.toString(),
-                Colors.orange,
-              ),
-              _buatItemStatistik(
-                'Ditolak',
-                jumlahDitolak.toString(),
-                Colors.red,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Total Aset Disetujui',
+                      style: GoogleFonts.poppins(
+                          color: Colors.white70, fontSize: 13),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _formatRupiah(totalDisetujui),
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
+          ),
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buatItemStatistik('Disetujui', jumlahDisetujui.toString(),
+                    TemaAplikasi.success),
+                Container(width: 1, height: 40, color: Colors.white24),
+                _buatItemStatistik('Menunggu', jumlahMenunggu.toString(),
+                    TemaAplikasi.warning),
+                Container(width: 1, height: 40, color: Colors.white24),
+                _buatItemStatistik(
+                    'Ditolak', jumlahDitolak.toString(), TemaAplikasi.error),
+              ],
+            ),
           ),
         ],
       ),
@@ -176,22 +183,26 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          width: 44,
+          height: 44,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(8),
+            color: warna.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(
-            nilai,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          child: Center(
+            child: Text(
+              nilai,
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+        const SizedBox(height: 6),
+        Text(label,
+            style: GoogleFonts.poppins(color: Colors.white70, fontSize: 11)),
       ],
     );
   }
@@ -203,179 +214,185 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
 
     switch (status) {
       case 'disetujui':
-        warnaStatus = Colors.green;
+        warnaStatus = TemaAplikasi.success;
         labelStatus = 'Disetujui';
         break;
       case 'ditolak':
-        warnaStatus = Colors.red;
+        warnaStatus = TemaAplikasi.error;
         labelStatus = 'Ditolak';
         break;
       default:
-        warnaStatus = Colors.orange;
+        warnaStatus = TemaAplikasi.warning;
         labelStatus = 'Menunggu Verifikasi';
     }
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        onTap: () => _tampilkanDetailAset(context, aset),
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF00796B).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+      decoration: TemaAplikasi.kartuDekorasi,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _tampilkanDetailAset(context, aset),
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            TemaAplikasi.primary.withOpacity(0.1),
+                            TemaAplikasi.primary.withOpacity(0.05),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        _dapatkanIkonJenisAset(aset['jenis_aset']),
+                        color: TemaAplikasi.primary,
+                        size: 24,
+                      ),
                     ),
-                    child: Icon(
-                      _dapatkanIkonJenisAset(aset['jenis_aset']),
-                      color: const Color(0xFF00796B),
-                      size: 24,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            aset['nama_aset'] ?? 'Unknown',
+                            style: TemaAplikasi.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            _dapatkanLabelJenisAset(aset['jenis_aset']),
+                            style: TemaAplikasi.bodySmall
+                                .copyWith(color: TemaAplikasi.textSecondary),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          aset['nama_aset'] ?? 'Unknown',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                    PopupMenuButton<String>(
+                      icon: Icon(Icons.more_vert,
+                          color: TemaAplikasi.textSecondary),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      onSelected: (value) {
+                        if (value == 'edit') {
+                          _tampilkanDialogEditAset(context, aset);
+                        } else if (value == 'hapus') {
+                          _konfirmasiHapusAset(context, aset);
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              Icon(Icons.edit_outlined,
+                                  size: 20, color: TemaAplikasi.info),
+                              const SizedBox(width: 12),
+                              Text('Edit', style: TemaAplikasi.bodyMedium),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _dapatkanLabelJenisAset(aset['jenis_aset']),
-                          style: const TextStyle(color: Colors.grey, fontSize: 12),
+                        PopupMenuItem(
+                          value: 'hapus',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete_outline,
+                                  size: 20, color: TemaAplikasi.error),
+                              const SizedBox(width: 12),
+                              Text('Hapus',
+                                  style: TemaAplikasi.bodyMedium
+                                      .copyWith(color: TemaAplikasi.error)),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  // ✅ TAMBAHAN: PopupMenu untuk Edit & Hapus
-                  PopupMenuButton<String>(
-                    onSelected: (value) {
-                      if (value == 'edit') {
-                        _tampilkanDialogEditAset(context, aset);
-                      } else if (value == 'hapus') {
-                        _konfirmasiHapusAset(context, aset);
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Row(
-                          children: [
-                            Icon(Icons.edit, size: 20),
-                            SizedBox(width: 8),
-                            Text('Edit'),
-                          ],
+                  ],
+                ),
+                const SizedBox(height: 12),
+                BadgeStatus(
+                  text: labelStatus,
+                  color: warnaStatus,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Nilai Aset',
+                          style: TemaAplikasi.bodySmall
+                              .copyWith(color: TemaAplikasi.textSecondary),
                         ),
-                      ),
-                      const PopupMenuItem(
-                        value: 'hapus',
-                        child: Row(
-                          children: [
-                            Icon(Icons.delete, size: 20, color: Colors.red),
-                            SizedBox(width: 8),
-                            Text('Hapus', style: TextStyle(color: Colors.red)),
-                          ],
+                        const SizedBox(height: 4),
+                        Text(
+                          _formatRupiah(
+                              double.tryParse(aset['nilai'].toString()) ?? 0.0),
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: TemaAplikasi.primary,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: warnaStatus.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
+                      ],
                     ),
+                    if (status == 'menunggu')
+                      ElevatedButton.icon(
+                        onPressed: () =>
+                            _tampilkanDialogVerifikasi(context, aset),
+                        icon: const Icon(Icons.check_circle_outline, size: 18),
+                        label: const Text('Verifikasi'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: TemaAplikasi.warning,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          elevation: 0,
+                        ),
+                      ),
+                  ],
+                ),
+                if (aset['keterangan'] != null &&
+                    aset['keterangan'].toString().isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
                     child: Text(
-                      labelStatus,
-                      style: TextStyle(
-                        color: warnaStatus,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      aset['keterangan'],
+                      style: TemaAplikasi.bodySmall
+                          .copyWith(color: TemaAplikasi.textSecondary),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Nilai Aset',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _formatRupiah(
-                            double.tryParse(aset['nilai'].toString()) ?? 0.0),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Color(0xFF00796B),
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (status == 'menunggu')
-                    ElevatedButton.icon(
-                      onPressed: () =>
-                          _tampilkanDialogVerifikasi(context, aset),
-                      icon: const Icon(Icons.check_circle_outline, size: 18),
-                      label: const Text('Verifikasi'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(Icons.person_outline,
+                        size: 14, color: TemaAplikasi.textTertiary),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Diusulkan oleh: ${aset['nama_pengusul'] ?? 'Unknown'}',
+                      style: TemaAplikasi.bodySmall.copyWith(
+                        color: TemaAplikasi.textTertiary,
+                        fontStyle: FontStyle.italic,
                       ),
                     ),
-                ],
-              ),
-              if (aset['keterangan'] != null &&
-                  aset['keterangan'].toString().isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Text(
-                    aset['keterangan'],
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  ],
                 ),
-              const SizedBox(height: 8),
-              Text(
-                'Diusulkan oleh: ${aset['nama_pengusul'] ?? 'Unknown'}',
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: Colors.grey,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -440,25 +457,41 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Tambah Aset Harta'),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: TemaAplikasi.primarySurface,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.add_business,
+                    color: TemaAplikasi.primary, size: 24),
+              ),
+              const SizedBox(width: 12),
+              Text('Tambah Aset Harta', style: TemaAplikasi.titleLarge),
+            ],
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: pengendaliNama,
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Nama Aset',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.business_center_outlined,
                   ),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Jenis Aset',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.category_outlined,
                   ),
-                  initialValue: jenisAsetTerpilih,
+                  value: jenisAsetTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'tanah', child: Text('Tanah')),
                     DropdownMenuItem(value: 'rumah', child: Text('Rumah')),
@@ -480,19 +513,18 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                 TextField(
                   controller: pengendaliNilai,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Nilai Aset (Rp)',
-                    border: OutlineInputBorder(),
-                    prefixText: 'Rp ',
+                    prefixIcon: Icons.attach_money,
                   ),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: pengendaliKeterangan,
                   maxLines: 3,
-                  decoration: const InputDecoration(
+                  decoration: TemaAplikasi.inputDecoration(
                     labelText: 'Keterangan (Opsional)',
-                    border: OutlineInputBorder(),
+                    prefixIcon: Icons.notes_outlined,
                   ),
                 ),
               ],
@@ -501,7 +533,8 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Batal'),
+              child: Text('Batal',
+                  style: TextStyle(color: TemaAplikasi.textSecondary)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -509,7 +542,13 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                     jenisAsetTerpilih == null ||
                     pengendaliNilai.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Semua field harus diisi')),
+                    SnackBar(
+                      content: const Text('Semua field harus diisi'),
+                      backgroundColor: TemaAplikasi.error,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
                   );
                   return;
                 }
@@ -534,15 +573,18 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(
-                      berhasil
-                          ? 'Aset berhasil ditambahkan'
-                          : 'Gagal menambahkan aset',
-                    ),
-                    backgroundColor: berhasil ? Colors.green : Colors.red,
+                    content: Text(berhasil
+                        ? 'Aset berhasil ditambahkan'
+                        : 'Gagal menambahkan aset'),
+                    backgroundColor:
+                        berhasil ? TemaAplikasi.success : TemaAplikasi.error,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                 );
               },
+              style: TemaAplikasi.primaryButton,
               child: const Text('Simpan'),
             ),
           ],
@@ -556,7 +598,31 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(aset['nama_aset'] ?? 'Detail Aset'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    TemaAplikasi.primary.withOpacity(0.1),
+                    TemaAplikasi.primary.withOpacity(0.05)
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(_dapatkanIkonJenisAset(aset['jenis_aset']),
+                  color: TemaAplikasi.primary, size: 24),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(aset['nama_aset'] ?? 'Detail Aset',
+                  style: TemaAplikasi.titleLarge,
+                  overflow: TextOverflow.ellipsis),
+            ),
+          ],
+        ),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -579,10 +645,19 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Keterangan:  ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text('Keterangan:',
+                          style: TemaAplikasi.bodyMedium
+                              .copyWith(fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
-                      Text(aset['keterangan']),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: TemaAplikasi.background,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(aset['keterangan'],
+                            style: TemaAplikasi.bodyMedium),
+                      ),
                     ],
                   ),
                 ),
@@ -592,7 +667,8 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Tutup'),
+            child: Text('Tutup',
+                style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           if (aset['status_verifikasi'] == 'menunggu')
             ElevatedButton(
@@ -600,6 +676,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                 Navigator.pop(context);
                 _tampilkanDialogVerifikasi(context, aset);
               },
+              style: TemaAplikasi.primaryButton,
               child: const Text('Verifikasi'),
             ),
         ],
@@ -609,19 +686,21 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
 
   Widget _buatBarisDetail(String label, String nilai) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 120,
-            child: Text(
-              label,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            width: 110,
+            child: Text(label,
+                style: TemaAplikasi.bodyMedium
+                    .copyWith(color: TemaAplikasi.textSecondary)),
           ),
-          const Text(':  '),
-          Expanded(child: Text(nilai)),
+          const Text(': ', style: TextStyle(fontWeight: FontWeight.w500)),
+          Expanded(
+              child: Text(nilai,
+                  style: TemaAplikasi.bodyMedium
+                      .copyWith(fontWeight: FontWeight.w500))),
         ],
       ),
     );
@@ -629,26 +708,41 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
 
   // ========== DIALOG VERIFIKASI ==========
   void _tampilkanDialogVerifikasi(
-    BuildContext context,
-    Map<String, dynamic> aset,
-  ) {
+      BuildContext context, Map<String, dynamic> aset) {
     final pengendaliCatatan = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Verifikasi Aset'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: TemaAplikasi.warningLight,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(Icons.verified_user_outlined,
+                  color: TemaAplikasi.warning, size: 24),
+            ),
+            const SizedBox(width: 12),
+            Text('Verifikasi Aset', style: TemaAplikasi.titleLarge),
+          ],
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Apakah Anda menyetujui aset "${aset['nama_aset']}"?'),
+            Text('Apakah Anda menyetujui aset "${aset['nama_aset']}"?',
+                style: TemaAplikasi.bodyMedium),
             const SizedBox(height: 16),
             TextField(
               controller: pengendaliCatatan,
               maxLines: 3,
-              decoration: const InputDecoration(
+              decoration: TemaAplikasi.inputDecoration(
                 labelText: 'Catatan (Opsional)',
-                border: OutlineInputBorder(),
+                prefixIcon: Icons.notes_outlined,
               ),
             ),
           ],
@@ -656,14 +750,15 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
+            child: Text('Batal',
+                style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           ElevatedButton(
             onPressed: () async {
               await _prosesVerifikasi(
                   context, aset, false, pengendaliCatatan.text);
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: TemaAplikasi.dangerButton,
             child: const Text('Tolak'),
           ),
           ElevatedButton(
@@ -671,7 +766,13 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
               await _prosesVerifikasi(
                   context, aset, true, pengendaliCatatan.text);
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: TemaAplikasi.success,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              elevation: 0,
+            ),
             child: const Text('Setuju'),
           ),
         ],
@@ -706,10 +807,10 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          berhasil ? 'Verifikasi berhasil' : 'Gagal verifikasi',
-        ),
-        backgroundColor: berhasil ? Colors.green : Colors.red,
+        content: Text(berhasil ? 'Verifikasi berhasil' : 'Gagal verifikasi'),
+        backgroundColor: berhasil ? TemaAplikasi.success : TemaAplikasi.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
@@ -717,10 +818,149 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
   // ========== ✅ DIALOG EDIT ASET (BARU) ==========
   void _tampilkanDialogEditAset(
       BuildContext context, Map<String, dynamic> aset) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Fitur edit akan segera ditambahkan'),
-        backgroundColor: Colors.orange,
+    final pengendaliNama =
+        TextEditingController(text: aset['nama_aset']?.toString() ?? '');
+    final pengendaliNilai =
+        TextEditingController(text: aset['nilai']?.toString() ?? '');
+    final pengendaliKeterangan =
+        TextEditingController(text: aset['keterangan']?.toString() ?? '');
+    String? jenisAsetTerpilih = aset['jenis_aset']?.toString();
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: TemaAplikasi.infoLight,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.edit, color: TemaAplikasi.info, size: 24),
+              ),
+              const SizedBox(width: 12),
+              Text('Edit Aset', style: TemaAplikasi.titleLarge),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: pengendaliNama,
+                  decoration: TemaAplikasi.inputDecoration(
+                    labelText: 'Nama Aset',
+                    prefixIcon: Icons.business_center_outlined,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  decoration: TemaAplikasi.inputDecoration(
+                    labelText: 'Jenis Aset',
+                    prefixIcon: Icons.category_outlined,
+                  ),
+                  value: jenisAsetTerpilih,
+                  items: const [
+                    DropdownMenuItem(value: 'tanah', child: Text('Tanah')),
+                    DropdownMenuItem(value: 'rumah', child: Text('Rumah')),
+                    DropdownMenuItem(
+                        value: 'kendaraan', child: Text('Kendaraan')),
+                    DropdownMenuItem(
+                        value: 'tabungan', child: Text('Tabungan')),
+                    DropdownMenuItem(
+                        value: 'emas', child: Text('Emas/Perhiasan')),
+                    DropdownMenuItem(
+                        value: 'saham', child: Text('Saham/Investasi')),
+                    DropdownMenuItem(value: 'lainnya', child: Text('Lainnya')),
+                  ],
+                  onChanged: (nilai) {
+                    setState(() => jenisAsetTerpilih = nilai);
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: pengendaliNilai,
+                  keyboardType: TextInputType.number,
+                  decoration: TemaAplikasi.inputDecoration(
+                    labelText: 'Nilai Aset (Rp)',
+                    prefixIcon: Icons.attach_money,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: pengendaliKeterangan,
+                  maxLines: 3,
+                  decoration: TemaAplikasi.inputDecoration(
+                    labelText: 'Keterangan (Opsional)',
+                    prefixIcon: Icons.notes_outlined,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Batal',
+                  style: TextStyle(color: TemaAplikasi.textSecondary)),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (pengendaliNama.text.isEmpty ||
+                    jenisAsetTerpilih == null ||
+                    pengendaliNilai.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Semua field harus diisi'),
+                      backgroundColor: TemaAplikasi.error,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                  );
+                  return;
+                }
+
+                final penyediaAuth =
+                    Provider.of<PenyediaAuth>(context, listen: false);
+                final penyediaWarisan =
+                    Provider.of<PenyediaWarisan>(context, listen: false);
+
+                final berhasil = await penyediaWarisan.editAset(
+                  id: aset['id'].toString(),
+                  namaAset: pengendaliNama.text,
+                  jenisAset: jenisAsetTerpilih!,
+                  nilai: double.parse(pengendaliNilai.text),
+                  keterangan: pengendaliKeterangan.text.isEmpty
+                      ? null
+                      : pengendaliKeterangan.text,
+                  nikPewaris: penyediaAuth.nikPewaris!,
+                );
+
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(berhasil
+                        ? 'Aset berhasil diupdate'
+                        : 'Gagal mengupdate aset'),
+                    backgroundColor:
+                        berhasil ? TemaAplikasi.success : TemaAplikasi.error,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                );
+              },
+              style: TemaAplikasi.primaryButton,
+              child: const Text('Simpan'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -730,13 +970,31 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Hapus Aset'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: TemaAplikasi.errorLight,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(Icons.delete_outline,
+                  color: TemaAplikasi.error, size: 24),
+            ),
+            const SizedBox(width: 12),
+            Text('Hapus Aset', style: TemaAplikasi.titleLarge),
+          ],
+        ),
         content: Text(
-            'Apakah Anda yakin ingin menghapus aset "${aset['nama_aset']}"?'),
+          'Apakah Anda yakin ingin menghapus aset "${aset['nama_aset']}"?',
+          style: TemaAplikasi.bodyMedium,
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
+            child: Text('Batal',
+                style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -757,11 +1015,15 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   content: Text(berhasil
                       ? 'Aset berhasil dihapus'
                       : 'Gagal menghapus aset'),
-                  backgroundColor: berhasil ? Colors.green : Colors.red,
+                  backgroundColor:
+                      berhasil ? TemaAplikasi.success : TemaAplikasi.error,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: TemaAplikasi.dangerButton,
             child: const Text('Hapus'),
           ),
         ],

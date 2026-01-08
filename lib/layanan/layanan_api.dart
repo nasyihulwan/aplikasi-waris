@@ -240,4 +240,30 @@ class LayananApi {
   static Future<Map<String, dynamic>> ambilRiwayat(String nikPewaris) {
     return _post('riwayat_ambil.php', {'nik_pewaris': nikPewaris});
   }
+
+  // ========== PROFIL PENGGUNA ==========
+
+  /// Mengambil data profil pengguna berdasarkan ID
+  static Future<Map<String, dynamic>> ambilProfil(int idPengguna) {
+    return _post('profil_ambil.php', {'id_pengguna': idPengguna.toString()});
+  }
+
+  /// Update profil pengguna
+  static Future<Map<String, dynamic>> updateProfil({
+    required int idPengguna,
+    required String nik,
+    required String namaLengkap,
+    required String tahunLahir,
+    required String tempatLahir,
+    required String alamat,
+  }) {
+    return _post('profil_update.php', {
+      'id_pengguna': idPengguna.toString(),
+      'nik': nik,
+      'nama_lengkap': namaLengkap,
+      'tahun_lahir': tahunLahir,
+      'tempat_lahir': tempatLahir,
+      'alamat': alamat,
+    });
+  }
 }
