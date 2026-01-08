@@ -19,7 +19,7 @@ class HalamanPengaturan extends StatefulWidget {
 }
 
 class _HalamanPengaturanState extends State<HalamanPengaturan> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
   bool _is2FAEnabled = false;
 
   @override
@@ -614,7 +614,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
     return Scaffold(
       backgroundColor: TemaAplikasi.background,
       body: _isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(color: TemaAplikasi.primary),
             )
           : SingleChildScrollView(
@@ -772,7 +772,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                                       _showDisable2FADialog();
                                     }
                                   },
-                                  activeColor: TemaAplikasi.primary,
+                                  activeThumbColor: TemaAplikasi.primary,
                                   activeTrackColor: TemaAplikasi.primarySurface,
                                 ),
                               ),
@@ -785,7 +785,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                                       color: TemaAplikasi.primarySurface,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.vpn_key,
                                       color: TemaAplikasi.primary,
                                       size: 20,
@@ -804,7 +804,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                                         fontSize: 12,
                                         color: TemaAplikasi.textSecondary),
                                   ),
-                                  trailing: Icon(
+                                  trailing: const Icon(
                                     Icons.chevron_right,
                                     color: TemaAplikasi.textTertiary,
                                   ),
@@ -851,7 +851,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                                     color: TemaAplikasi.infoLight,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.person_outline,
                                     color: TemaAplikasi.info,
                                   ),
@@ -869,7 +869,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                                       fontSize: 12,
                                       color: TemaAplikasi.textSecondary),
                                 ),
-                                trailing: Icon(
+                                trailing: const Icon(
                                   Icons.chevron_right,
                                   color: TemaAplikasi.textTertiary,
                                 ),
@@ -892,7 +892,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                                     color: TemaAplikasi.successLight,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.lock_outline,
                                     color: TemaAplikasi.success,
                                   ),
@@ -914,7 +914,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                                           ? TemaAplikasi.textSecondary
                                           : TemaAplikasi.warning),
                                 ),
-                                trailing: Icon(
+                                trailing: const Icon(
                                   Icons.chevron_right,
                                   color: TemaAplikasi.textTertiary,
                                 ),
@@ -946,7 +946,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         onPressed: _showLogoutConfirmation,
-                        icon: Icon(Icons.logout, color: TemaAplikasi.error),
+                        icon: const Icon(Icons.logout, color: TemaAplikasi.error),
                         label: Text(
                           'Logout',
                           style: GoogleFonts.poppins(
@@ -956,7 +956,7 @@ class _HalamanPengaturanState extends State<HalamanPengaturan> {
                         ),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          side: BorderSide(color: TemaAplikasi.error),
+                          side: const BorderSide(color: TemaAplikasi.error),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

@@ -219,7 +219,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.warning_amber_rounded,
+                          const Icon(Icons.warning_amber_rounded,
                               color: TemaAplikasi.warning, size: 24),
                           const SizedBox(width: 8),
                           Expanded(
@@ -275,7 +275,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                             style: GoogleFonts.poppins()),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: TemaAplikasi.primary,
-                          side: BorderSide(color: TemaAplikasi.primary),
+                          side: const BorderSide(color: TemaAplikasi.primary),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -512,7 +512,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.info_outline, color: TemaAplikasi.info),
+                            const Icon(Icons.info_outline, color: TemaAplikasi.info),
                             const SizedBox(width: 8),
                             Text(
                               'Cara Mengaktifkan',
@@ -627,7 +627,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(
+            const CircularProgressIndicator(
               color: TemaAplikasi.primary,
             ),
             const SizedBox(height: 16),
@@ -657,7 +657,7 @@ class _HalamanSetup2FAState extends State<HalamanSetup2FA> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.error_outline,
               size: 48,
               color: TemaAplikasi.error,

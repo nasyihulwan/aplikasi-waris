@@ -112,13 +112,13 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
                                 icon: Icons.account_balance_wallet_outlined,
                                 warna: TemaAplikasi.menuOrange,
                               ),
-                              KartuMenu(
+                              const KartuMenu(
                                 judul: 'Perhitungan',
                                 subjudul: 'Hitung Waris',
                                 icon: Icons.calculate_outlined,
                                 warna: TemaAplikasi.menuGreen,
                               ),
-                              KartuMenu(
+                              const KartuMenu(
                                 judul: 'Riwayat',
                                 subjudul: 'Lihat Riwayat',
                                 icon: Icons.history,
@@ -315,7 +315,7 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
                   color: TemaAplikasi.primarySurface,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.analytics_outlined,
                   size: 22,
                   color: TemaAplikasi.primary,

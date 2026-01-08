@@ -60,7 +60,7 @@ class _HalamanUtamaState extends State<HalamanUtama> {
                 color: TemaAplikasi.errorLight,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.logout,
                 color: TemaAplikasi.error,
                 size: 24,
@@ -83,7 +83,7 @@ class _HalamanUtamaState extends State<HalamanUtama> {
               print('🏠 [UTAMA] Logout dibatalkan');
               Navigator.pop(context);
             },
-            child: Text(
+            child: const Text(
               'Batal',
               style: TextStyle(color: TemaAplikasi.textSecondary),
             ),
@@ -268,11 +268,11 @@ class _HalamanUtamaState extends State<HalamanUtama> {
           case 'bantuan':
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Row(
+                content: const Row(
                   children: [
-                    const Icon(Icons.info_outline, color: Colors.white),
-                    const SizedBox(width: 8),
-                    const Text('Fitur bantuan akan segera hadir'),
+                    Icon(Icons.info_outline, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text('Fitur bantuan akan segera hadir'),
                   ],
                 ),
                 backgroundColor: TemaAplikasi.info,

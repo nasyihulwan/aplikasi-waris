@@ -277,7 +277,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                       ),
                     ),
                     PopupMenuButton<String>(
-                      icon: Icon(Icons.more_vert,
+                      icon: const Icon(Icons.more_vert,
                           color: TemaAplikasi.textSecondary),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
@@ -293,7 +293,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                           value: 'edit',
                           child: Row(
                             children: [
-                              Icon(Icons.edit_outlined,
+                              const Icon(Icons.edit_outlined,
                                   size: 20, color: TemaAplikasi.info),
                               const SizedBox(width: 12),
                               Text('Edit', style: TemaAplikasi.bodyMedium),
@@ -304,7 +304,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                           value: 'hapus',
                           child: Row(
                             children: [
-                              Icon(Icons.delete_outline,
+                              const Icon(Icons.delete_outline,
                                   size: 20, color: TemaAplikasi.error),
                               const SizedBox(width: 12),
                               Text('Hapus',
@@ -379,7 +379,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Icons.person_outline,
+                    const Icon(Icons.person_outline,
                         size: 14, color: TemaAplikasi.textTertiary),
                     const SizedBox(width: 4),
                     Text(
@@ -467,7 +467,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   color: TemaAplikasi.primarySurface,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(Icons.add_business,
+                child: const Icon(Icons.add_business,
                     color: TemaAplikasi.primary, size: 24),
               ),
               const SizedBox(width: 12),
@@ -491,7 +491,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                     labelText: 'Jenis Aset',
                     prefixIcon: Icons.category_outlined,
                   ),
-                  value: jenisAsetTerpilih,
+                  initialValue: jenisAsetTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'tanah', child: Text('Tanah')),
                     DropdownMenuItem(value: 'rumah', child: Text('Rumah')),
@@ -533,7 +533,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Batal',
+              child: const Text('Batal',
                   style: TextStyle(color: TemaAplikasi.textSecondary)),
             ),
             ElevatedButton(
@@ -667,7 +667,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Tutup',
+            child: const Text('Tutup',
                 style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           if (aset['status_verifikasi'] == 'menunggu')
@@ -723,7 +723,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                 color: TemaAplikasi.warningLight,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(Icons.verified_user_outlined,
+              child: const Icon(Icons.verified_user_outlined,
                   color: TemaAplikasi.warning, size: 24),
             ),
             const SizedBox(width: 12),
@@ -750,7 +750,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal',
+            child: const Text('Batal',
                 style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           ElevatedButton(
@@ -840,7 +840,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   color: TemaAplikasi.infoLight,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(Icons.edit, color: TemaAplikasi.info, size: 24),
+                child: const Icon(Icons.edit, color: TemaAplikasi.info, size: 24),
               ),
               const SizedBox(width: 12),
               Text('Edit Aset', style: TemaAplikasi.titleLarge),
@@ -863,7 +863,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                     labelText: 'Jenis Aset',
                     prefixIcon: Icons.category_outlined,
                   ),
-                  value: jenisAsetTerpilih,
+                  initialValue: jenisAsetTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'tanah', child: Text('Tanah')),
                     DropdownMenuItem(value: 'rumah', child: Text('Rumah')),
@@ -905,7 +905,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Batal',
+              child: const Text('Batal',
                   style: TextStyle(color: TemaAplikasi.textSecondary)),
             ),
             ElevatedButton(
@@ -979,7 +979,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                 color: TemaAplikasi.errorLight,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(Icons.delete_outline,
+              child: const Icon(Icons.delete_outline,
                   color: TemaAplikasi.error, size: 24),
             ),
             const SizedBox(width: 12),
@@ -993,7 +993,7 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal',
+            child: const Text('Batal',
                 style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           ElevatedButton(

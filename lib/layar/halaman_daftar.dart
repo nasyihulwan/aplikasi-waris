@@ -171,8 +171,9 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
     if (isEmail) return Icons.email_outlined;
     if (isPassword) return Icons.lock_outline;
     if (label.toLowerCase().contains('nama')) return Icons.person_outline;
-    if (label.toLowerCase().contains('tahun'))
+    if (label.toLowerCase().contains('tahun')) {
       return Icons.calendar_today_outlined;
+    }
     if (label.toLowerCase().contains('tempat')) return Icons.place_outlined;
     if (label.toLowerCase().contains('alamat')) return Icons.home_outlined;
     if (label.toLowerCase().contains('nik')) return Icons.badge_outlined;
@@ -301,8 +302,8 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                         Expanded(
                             child: Container(
                                 height: 1, color: TemaAplikasi.divider)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Icon(Icons.arrow_downward,
                               color: TemaAplikasi.textTertiary, size: 20),
                         ),
@@ -410,7 +411,7 @@ class _HalamanDaftarState extends State<HalamanDaftar> {
                       decoration: TemaAplikasi.infoLightBox,
                       child: Row(
                         children: [
-                          Icon(Icons.info_outline,
+                          const Icon(Icons.info_outline,
                               color: TemaAplikasi.info, size: 20),
                           const SizedBox(width: 10),
                           Expanded(

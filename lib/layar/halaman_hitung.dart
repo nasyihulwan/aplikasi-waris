@@ -46,7 +46,7 @@ class _HalamanHitungState extends State<HalamanHitung> {
                 ),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.calculate_outlined,
                 size: 80,
                 color: TemaAplikasi.primary,
@@ -120,7 +120,7 @@ class _HalamanHitungState extends State<HalamanHitung> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.info_outline, size: 18, color: TemaAplikasi.info),
+                  const Icon(Icons.info_outline, size: 18, color: TemaAplikasi.info),
                   const SizedBox(width: 8),
                   Text(
                     'Pastikan data ahli waris dan aset sudah lengkap',
@@ -175,8 +175,8 @@ class _HalamanHitungState extends State<HalamanHitung> {
                   child: ElevatedButton.icon(
                     onPressed: _hitungUlang,
                     icon:
-                        Icon(Icons.refresh, color: TemaAplikasi.textSecondary),
-                    label: Text('Hitung Ulang',
+                        const Icon(Icons.refresh, color: TemaAplikasi.textSecondary),
+                    label: const Text('Hitung Ulang',
                         style: TextStyle(color: TemaAplikasi.textPrimary)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
@@ -351,7 +351,7 @@ class _HalamanHitungState extends State<HalamanHitung> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline,
+                    const Icon(Icons.info_outline,
                         size: 16, color: TemaAplikasi.info),
                     const SizedBox(width: 8),
                     Expanded(

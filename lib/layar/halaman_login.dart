@@ -176,7 +176,7 @@ class _HalamanLoginState extends State<HalamanLogin> {
                 decoration: TemaAplikasi.infoLightBox,
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline,
+                    const Icon(Icons.info_outline,
                         color: TemaAplikasi.info, size: 20),
                     const SizedBox(width: 8),
                     Expanded(

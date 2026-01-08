@@ -180,7 +180,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                   color: TemaAplikasi.primarySurface,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.person_add,
                   color: TemaAplikasi.primary,
                   size: 24,
@@ -207,7 +207,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     labelText: 'Hubungan',
                     prefixIcon: Icons.family_restroom,
                   ),
-                  value: hubunganTerpilih,
+                  initialValue: hubunganTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'istri', child: Text('Istri')),
                     DropdownMenuItem(value: 'suami', child: Text('Suami')),
@@ -234,7 +234,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     labelText: 'Jenis Kelamin',
                     prefixIcon: Icons.wc,
                   ),
-                  value: jenisKelaminTerpilih,
+                  initialValue: jenisKelaminTerpilih,
                   items: const [
                     DropdownMenuItem(
                         value: 'laki-laki', child: Text('Laki-laki')),
@@ -251,7 +251,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Batal',
+              child: const Text('Batal',
                   style: TextStyle(color: TemaAplikasi.textSecondary)),
             ),
             ElevatedButton(
@@ -346,7 +346,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                   color: TemaAplikasi.infoLight,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.edit,
                   color: TemaAplikasi.info,
                   size: 24,
@@ -373,7 +373,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     labelText: 'Hubungan',
                     prefixIcon: Icons.family_restroom,
                   ),
-                  value: hubunganTerpilih,
+                  initialValue: hubunganTerpilih,
                   items: const [
                     DropdownMenuItem(value: 'istri', child: Text('Istri')),
                     DropdownMenuItem(value: 'suami', child: Text('Suami')),
@@ -400,7 +400,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                     labelText: 'Jenis Kelamin',
                     prefixIcon: Icons.wc,
                   ),
-                  value: jenisKelaminTerpilih,
+                  initialValue: jenisKelaminTerpilih,
                   items: const [
                     DropdownMenuItem(
                         value: 'laki-laki', child: Text('Laki-laki')),
@@ -417,7 +417,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Batal',
+              child: const Text('Batal',
                   style: TextStyle(color: TemaAplikasi.textSecondary)),
             ),
             ElevatedButton(
@@ -498,7 +498,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
                 color: TemaAplikasi.errorLight,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.delete_outline,
                 color: TemaAplikasi.error,
                 size: 24,
@@ -515,7 +515,7 @@ class _HalamanAhliWarisState extends State<HalamanAhliWaris> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Batal',
+            child: const Text('Batal',
                 style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           ElevatedButton(

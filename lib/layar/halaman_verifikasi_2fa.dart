@@ -267,7 +267,7 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.info_outline,
+                            const Icon(Icons.info_outline,
                                 color: TemaAplikasi.success, size: 18),
                             const SizedBox(width: 8),
                             Text(
@@ -311,7 +311,7 @@ class _HalamanVerifikasi2FAState extends State<HalamanVerifikasi2FA> {
                           ),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.error_outline,
                                 color: TemaAplikasi.error,
                                 size: 20,

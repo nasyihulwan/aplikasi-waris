@@ -68,6 +68,63 @@ class LayananApi {
     }
   }
 
+  // ========== PRIVATE POST JSON METHOD ==========
+
+  static Future<Map<String, dynamic>> _postJson(
+      String endpoint, Map<String, dynamic> body) async {
+    try {
+      final uri = Uri.parse('$baseUrl/$endpoint');
+      print('🟡 API POST JSON: $uri');
+      print('🟡 BODY: $body');
+
+      final response = await http
+          .post(
+            uri,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: json.encode(body),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      print('🟢 STATUS: ${response.statusCode}');
+      print('🟢 RESPONSE: ${response.body}');
+
+      if (response.statusCode == 200) {
+        try {
+          final decoded = json.decode(response.body);
+          print('📦 DECODED: $decoded');
+          return decoded;
+        } catch (e) {
+          print('🔴 JSON DECODE ERROR: $e');
+          return {
+            'sukses': false,
+            'pesan': 'Error parsing response: ${e.toString()}'
+          };
+        }
+      } else {
+        print('🔴 HTTP ERROR: ${response.statusCode}');
+        return {
+          'sukses': false,
+          'pesan': 'Server error: ${response.statusCode}'
+        };
+      }
+    } on TimeoutException {
+      print('🔴 TIMEOUT!');
+      return {'sukses': false, 'pesan': 'Koneksi timeout. Cek jaringan Anda'};
+    } on http.ClientException catch (e) {
+      print('🔴 CLIENT EXCEPTION: $e');
+      return {
+        'sukses': false,
+        'pesan': 'Gagal terhubung ke server. Pastikan Laragon jalan.'
+      };
+    } catch (e) {
+      print('🔴 EXCEPTION: $e');
+      return {'sukses': false, 'pesan': 'Error: ${e.toString()}'};
+    }
+  }
+
   // ========== AUTHENTICATION ==========
 
   static Future<Map<String, dynamic>> daftar({
@@ -245,7 +302,7 @@ class LayananApi {
 
   /// Mengambil data profil pengguna berdasarkan ID
   static Future<Map<String, dynamic>> ambilProfil(int idPengguna) {
-    return _post('profil_ambil.php', {'id_pengguna': idPengguna.toString()});
+    return _postJson('profil_ambil.php', {'user_id': idPengguna});
   }
 
   /// Update profil pengguna
@@ -257,8 +314,8 @@ class LayananApi {
     required String tempatLahir,
     required String alamat,
   }) {
-    return _post('profil_update.php', {
-      'id_pengguna': idPengguna.toString(),
+    return _postJson('profil_update.php', {
+      'user_id': idPengguna,
       'nik': nik,
       'nama_lengkap': namaLengkap,
       'tahun_lahir': tahunLahir,

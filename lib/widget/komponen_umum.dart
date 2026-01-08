@@ -501,7 +501,7 @@ class KartuListItem extends StatelessWidget {
                   trailing!
                 else if (onEdit != null || onDelete != null)
                   PopupMenuButton<String>(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.more_vert,
                       color: TemaAplikasi.textSecondary,
                     ),
@@ -510,25 +510,25 @@ class KartuListItem extends StatelessWidget {
                     ),
                     itemBuilder: (context) => [
                       if (onEdit != null)
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'edit',
                           child: Row(
                             children: [
                               Icon(Icons.edit_outlined,
                                   size: 20, color: TemaAplikasi.primary),
-                              const SizedBox(width: 12),
-                              const Text('Edit'),
+                              SizedBox(width: 12),
+                              Text('Edit'),
                             ],
                           ),
                         ),
                       if (onDelete != null)
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'hapus',
                           child: Row(
                             children: [
                               Icon(Icons.delete_outline,
                                   size: 20, color: TemaAplikasi.error),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12),
                               Text('Hapus',
                                   style: TextStyle(color: TemaAplikasi.error)),
                             ],
@@ -576,7 +576,7 @@ class TampilanKosong extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: TemaAplikasi.primarySurface,
                 shape: BoxShape.circle,
               ),
@@ -630,7 +630,7 @@ class LoadingIndicator extends StatelessWidget {
     final content = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircularProgressIndicator(
+        const CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(TemaAplikasi.primary),
           strokeWidth: 3,
         ),

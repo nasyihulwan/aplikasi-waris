@@ -242,7 +242,7 @@ class _HalamanEditProfilState extends State<HalamanEditProfil> {
                 color: TemaAplikasi.warningLight,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.warning_amber_rounded,
                 color: TemaAplikasi.warning,
                 size: 24,
@@ -264,7 +264,7 @@ class _HalamanEditProfilState extends State<HalamanEditProfil> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(
+            child: const Text(
               'Batal',
               style: TextStyle(color: TemaAplikasi.textSecondary),
             ),
@@ -442,7 +442,7 @@ class _HalamanEditProfilState extends State<HalamanEditProfil> {
                 ),
               ],
             ),
-            child: Icon(
+            child: const Icon(
               Icons.person,
               size: 56,
               color: TemaAplikasi.primary,
@@ -479,7 +479,7 @@ class _HalamanEditProfilState extends State<HalamanEditProfil> {
                           color: TemaAplikasi.primarySurface,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit_note,
                           color: TemaAplikasi.primary,
                           size: 24,
