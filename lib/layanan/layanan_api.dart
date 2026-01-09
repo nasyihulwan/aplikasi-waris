@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 class LayananApi {
-  static const String baseUrl =
-      'http://10.130.28.148/aplikasi_waris/backend_php';
+  static const String baseUrl = 'http://localhost/aplikasi_waris/backend_php';
 
   // ========== PRIVATE POST METHOD ==========
 

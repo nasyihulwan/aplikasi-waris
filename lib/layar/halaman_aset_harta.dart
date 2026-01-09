@@ -347,20 +347,49 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                       ],
                     ),
                     if (status == 'menunggu')
-                      ElevatedButton.icon(
-                        onPressed: () =>
-                            _tampilkanDialogVerifikasi(context, aset),
-                        icon: const Icon(Icons.check_circle_outline, size: 18),
-                        label: const Text('Verifikasi'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: TemaAplikasi.warning,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 10),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)),
-                          elevation: 0,
-                        ),
+                      Builder(
+                        builder: (context) {
+                          final penyediaAuth =
+                              Provider.of<PenyediaAuth>(context, listen: false);
+                          final idPengusul =
+                              aset['id_pengusul']?.toString() ?? '';
+                          final idPengguna =
+                              penyediaAuth.idPengguna?.toString() ?? '';
+                          
+                          // DEBUG - hapus setelah fix
+                          print('🔴 TOMBOL VERIFIKASI CHECK:');
+                          print('   aset id: ${aset['id']}');
+                          print('   id_pengusul dari aset: "$idPengusul"');
+                          print('   id_pengguna login: "$idPengguna"');
+                          print('   sama? ${idPengusul == idPengguna}');
+                          
+                          // Jika aset milik sendiri, JANGAN tampilkan tombol
+                          if (idPengusul == idPengguna) {
+                            print('   ❌ TOMBOL DISEMBUNYIKAN (aset sendiri)');
+                            return const SizedBox.shrink();
+                          }
+                          
+                          print('   ✅ TOMBOL DITAMPILKAN (aset orang lain)');
+
+                          return ElevatedButton.icon(
+                            onPressed: () =>
+                                _tampilkanDialogVerifikasi(context, aset),
+                            icon: const Icon(
+                              Icons.check_circle_outline,
+                              size: 18,
+                            ),
+                            label: const Text('Verifikasi'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: TemaAplikasi.warning,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              elevation: 0,
+                            ),
+                          );
+                        },
                       ),
                   ],
                 ),
@@ -671,13 +700,30 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                 style: TextStyle(color: TemaAplikasi.textSecondary)),
           ),
           if (aset['status_verifikasi'] == 'menunggu')
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _tampilkanDialogVerifikasi(context, aset);
+            Builder(
+              builder: (ctx) {
+                final penyediaAuth =
+                    Provider.of<PenyediaAuth>(ctx, listen: false);
+                final idPengusul = aset['id_pengusul']?.toString() ?? '';
+                final idPengguna = penyediaAuth.idPengguna?.toString() ?? '';
+                final bisaVerifikasi = idPengusul.isNotEmpty &&
+                    idPengguna.isNotEmpty &&
+                    idPengusul != idPengguna;
+
+                // Tidak tampilkan tombol jika aset sendiri
+                if (!bisaVerifikasi) {
+                  return const SizedBox.shrink();
+                }
+
+                return ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _tampilkanDialogVerifikasi(context, aset);
+                  },
+                  style: TemaAplikasi.primaryButton,
+                  child: const Text('Verifikasi'),
+                );
               },
-              style: TemaAplikasi.primaryButton,
-              child: const Text('Verifikasi'),
             ),
         ],
       ),
@@ -840,7 +886,8 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                   color: TemaAplikasi.infoLight,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.edit, color: TemaAplikasi.info, size: 24),
+                child:
+                    const Icon(Icons.edit, color: TemaAplikasi.info, size: 24),
               ),
               const SizedBox(width: 12),
               Text('Edit Aset', style: TemaAplikasi.titleLarge),
