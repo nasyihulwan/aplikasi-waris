@@ -355,20 +355,20 @@ class _HalamanAsetHartaState extends State<HalamanAsetHarta> {
                               aset['id_pengusul']?.toString() ?? '';
                           final idPengguna =
                               penyediaAuth.idPengguna?.toString() ?? '';
-                          
+
                           // DEBUG - hapus setelah fix
                           print('🔴 TOMBOL VERIFIKASI CHECK:');
                           print('   aset id: ${aset['id']}');
                           print('   id_pengusul dari aset: "$idPengusul"');
                           print('   id_pengguna login: "$idPengguna"');
                           print('   sama? ${idPengusul == idPengguna}');
-                          
+
                           // Jika aset milik sendiri, JANGAN tampilkan tombol
                           if (idPengusul == idPengguna) {
                             print('   ❌ TOMBOL DISEMBUNYIKAN (aset sendiri)');
                             return const SizedBox.shrink();
                           }
-                          
+
                           print('   ✅ TOMBOL DITAMPILKAN (aset orang lain)');
 
                           return ElevatedButton.icon(
