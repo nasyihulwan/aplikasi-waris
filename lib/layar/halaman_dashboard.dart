@@ -118,12 +118,13 @@ class _HalamanDashboardState extends State<HalamanDashboard> {
                                 icon: Icons.calculate_outlined,
                                 warna: TemaAplikasi.menuGreen,
                               ),
-                              const KartuMenu(
-                                judul: 'Riwayat',
-                                subjudul: 'Lihat Riwayat',
-                                icon: Icons.history,
-                                warna: TemaAplikasi.menuPurple,
-                              ),
+                              // Riwayat - disembunyikan sementara
+                              // const KartuMenu(
+                              //   judul: 'Riwayat',
+                              //   subjudul: 'Lihat Riwayat',
+                              //   icon: Icons.history,
+                              //   warna: TemaAplikasi.menuPurple,
+                              // ),
                             ],
                           ),
                         ),

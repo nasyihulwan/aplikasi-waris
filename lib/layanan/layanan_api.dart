@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 class LayananApi {
-  static const String baseUrl = 'http://localhost/aplikasi_waris/backend_php';
+  static const String baseUrl = 'http://172.20.10.7/aplikasi_waris/backend_php';
 
   // ========== PRIVATE POST METHOD ==========
 
@@ -254,13 +254,12 @@ class LayananApi {
     String? lokasi,
     String? keterangan,
   }) {
-    return _post('aset_edit.php', {
-      'id': id,
+    return _postJson('aset_edit.php', {
+      'id': int.tryParse(id) ?? id,
       'nama_aset': namaAset,
       'jenis_aset': jenisAset,
-      'nilai': nilai.toString(),
-      if (lokasi != null && lokasi.isNotEmpty) 'lokasi': lokasi,
-      if (keterangan != null && keterangan.isNotEmpty) 'keterangan': keterangan,
+      'nilai': nilai,
+      'keterangan': keterangan ?? '',
     });
   }
 

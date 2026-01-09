@@ -120,7 +120,8 @@ class _HalamanHitungState extends State<HalamanHitung> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.info_outline, size: 18, color: TemaAplikasi.info),
+                  const Icon(Icons.info_outline,
+                      size: 18, color: TemaAplikasi.info),
                   const SizedBox(width: 8),
                   Text(
                     'Pastikan data ahli waris dan aset sudah lengkap',
@@ -174,8 +175,8 @@ class _HalamanHitungState extends State<HalamanHitung> {
                   ),
                   child: ElevatedButton.icon(
                     onPressed: _hitungUlang,
-                    icon:
-                        const Icon(Icons.refresh, color: TemaAplikasi.textSecondary),
+                    icon: const Icon(Icons.refresh,
+                        color: TemaAplikasi.textSecondary),
                     label: const Text('Hitung Ulang',
                         style: TextStyle(color: TemaAplikasi.textPrimary)),
                     style: ElevatedButton.styleFrom(
@@ -653,32 +654,17 @@ class _HalamanHitungState extends State<HalamanHitung> {
   Future<void> _simpanHasil() async {
     if (_hasilPerhitungan == null) return;
 
-    try {
-      // TODO: Implement simpanRiwayat method in PenyediaWarisan
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Hasil perhitungan berhasil disimpan'),
-            backgroundColor: TemaAplikasi.success,
-            behavior: SnackBarBehavior.floating,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        );
-      }
-    } catch (e) {
-      print('Error simpan hasil: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Terjadi kesalahan: ${e.toString()}'),
-            backgroundColor: TemaAplikasi.error,
-            behavior: SnackBarBehavior.floating,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        );
-      }
+    // Fitur belum tersedia
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Fitur ini sedang dikembangkan'),
+          backgroundColor: TemaAplikasi.warning,
+          behavior: SnackBarBehavior.floating,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
     }
   }
 }

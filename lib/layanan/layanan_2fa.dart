@@ -8,7 +8,8 @@ class Layanan2FA {
   // Base URL untuk API 2FA
   // Development: localhost
   // Production: ganti dengan URL server
-  static const String baseUrl = 'http://localhost/aplikasi_waris/auth/2fa.php';
+  static const String baseUrl =
+      'http://172.20.10.7/aplikasi_waris/auth/2fa.php';
 
   // Timeout untuk request API
   static const Duration _timeout = Duration(seconds: 30);
